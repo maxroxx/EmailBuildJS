@@ -1,4 +1,5 @@
 export { default as renderToStaticMarkup } from './renderers/renderToStaticMarkup';
+export { default as AccentColorContext, useAccentColor } from './AccentColorContext';
 
 export {
   ReaderBlockSchema,

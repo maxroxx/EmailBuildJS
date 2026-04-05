@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 
 import { ToggleButton } from '@mui/material';
 import { ButtonProps, ButtonPropsDefaults, ButtonPropsSchema } from '@usewaypoint/block-button';
+import { useAccentColor } from '../../../../documents/blocks/EmailLayout/AccentColorContext';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColorInput from './helpers/inputs/ColorInput';
@@ -16,6 +17,7 @@ type ButtonSidebarPanelProps = {
 };
 export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanelProps) {
   const [, setErrors] = useState<ZodError | null>(null);
+  const accentColor = useAccentColor();
 
   const updateData = (d: unknown) => {
     const res = ButtonPropsSchema.safeParse(d);
@@ -33,7 +35,7 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
   const size = data.props?.size ?? ButtonPropsDefaults.size;
   const buttonStyle = data.props?.buttonStyle ?? ButtonPropsDefaults.buttonStyle;
   const buttonTextColor = data.props?.buttonTextColor ?? ButtonPropsDefaults.buttonTextColor;
-  const buttonBackgroundColor = data.props?.buttonBackgroundColor ?? ButtonPropsDefaults.buttonBackgroundColor;
+  const buttonBackgroundColor = data.props?.buttonBackgroundColor ?? accentColor ?? '#999999';
 
   return (
     <BaseSidebarPanel title="Button block">

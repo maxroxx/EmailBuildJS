@@ -1,5 +1,6 @@
 import React from 'react';
 
+import AccentColorContext from '../../AccentColorContext';
 import { ReaderBlock } from '../../Reader/core';
 
 import { EmailLayoutProps } from './EmailLayoutPropsSchema';
@@ -36,48 +37,54 @@ function getBorder({ borderColor }: EmailLayoutProps) {
 }
 
 export default function EmailLayoutReader(props: EmailLayoutProps) {
+  const accentColor = props.accentColor ?? null;
+  const textColor = props.textColor ?? '#262626';
+  const linkColor = accentColor ?? textColor;
   const childrenIds = props.childrenIds ?? [];
   return (
-    <div
-      style={{
-        backgroundColor: props.backdropColor ?? '#F5F5F5',
-        color: props.textColor ?? '#262626',
-        fontFamily: getFontFamily(props.fontFamily),
-        fontSize: '16px',
-        fontWeight: '400',
-        letterSpacing: '0.15008px',
-        lineHeight: '1.5',
-        margin: '0',
-        padding: '32px 0',
-        minHeight: '100%',
-        width: '100%',
-      }}
-    >
-      <table
-        align="center"
-        width="100%"
+    <AccentColorContext.Provider value={accentColor}>
+      <div
         style={{
-          margin: '0 auto',
-          maxWidth: '600px',
-          backgroundColor: props.canvasColor ?? '#FFFFFF',
-          borderRadius: props.borderRadius ?? undefined,
-          border: getBorder(props),
+          backgroundColor: props.backdropColor ?? '#F5F5F5',
+          color: textColor,
+          fontFamily: getFontFamily(props.fontFamily),
+          fontSize: '16px',
+          fontWeight: '400',
+          letterSpacing: '0.15008px',
+          lineHeight: '1.5',
+          margin: '0',
+          padding: '32px 0',
+          minHeight: '100%',
+          width: '100%',
         }}
-        role="presentation"
-        cellSpacing="0"
-        cellPadding="0"
-        border={0}
       >
-        <tbody>
-          <tr style={{ width: '100%' }}>
-            <td>
-              {childrenIds.map((childId) => (
-                <ReaderBlock key={childId} id={childId} />
-              ))}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <style>{`a { color: ${linkColor}; }`}</style>
+        <table
+          align="center"
+          width="100%"
+          style={{
+            margin: '0 auto',
+            maxWidth: '600px',
+            backgroundColor: props.canvasColor ?? '#FFFFFF',
+            borderRadius: props.borderRadius ?? undefined,
+            border: getBorder(props),
+          }}
+          role="presentation"
+          cellSpacing="0"
+          cellPadding="0"
+          border={0}
+        >
+          <tbody>
+            <tr style={{ width: '100%' }}>
+              <td>
+                {childrenIds.map((childId) => (
+                  <ReaderBlock key={childId} id={childId} />
+                ))}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </AccentColorContext.Provider>
   );
 }

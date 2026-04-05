@@ -1,8 +1,9 @@
 import React, { createContext, useContext } from 'react';
 import { z } from 'zod';
 
-import { Avatar, AvatarPropsSchema } from '@usewaypoint/block-avatar';
-import { Button, ButtonPropsSchema } from '@usewaypoint/block-button';
+import { Avatar, AvatarProps, AvatarPropsSchema, buildAvatarUrl } from '@usewaypoint/block-avatar';
+import { Button, ButtonProps, ButtonPropsSchema } from '@usewaypoint/block-button';
+import { useAccentColor } from '../AccentColorContext';
 import { Divider, DividerPropsSchema } from '@usewaypoint/block-divider';
 import { Heading, HeadingPropsSchema } from '@usewaypoint/block-heading';
 import { Html, HtmlPropsSchema } from '@usewaypoint/block-html';
@@ -24,6 +25,40 @@ import EmailLayoutReader from '../blocks/EmailLayout/EmailLayoutReader';
 
 const ReaderContext = createContext<TReaderDocument>({});
 
+const BUTTON_DEFAULT_COLOR = '#999999';
+const AVATAR_DEFAULT_COLOR = '#999999';
+
+function ButtonWithAccentDefault(props: ButtonProps) {
+  const accentColor = useAccentColor();
+  return (
+    <Button
+      {...props}
+      props={{
+        ...props.props,
+        buttonBackgroundColor: props.props?.buttonBackgroundColor ?? accentColor ?? BUTTON_DEFAULT_COLOR,
+      }}
+    />
+  );
+}
+
+function AvatarWithAccentDefault(props: AvatarProps) {
+  const accentColor = useAccentColor();
+  const backgroundColor = props.props?.backgroundColor ?? accentColor ?? AVATAR_DEFAULT_COLOR;
+  const borderColor = props.props?.borderColor ?? undefined;
+  const imageUrl = props.props?.imageUrl || buildAvatarUrl(props.props?.text, backgroundColor);
+  return (
+    <Avatar
+      {...props}
+      props={{
+        ...props.props,
+        imageUrl,
+        borderColor,
+        backgroundColor,
+      }}
+    />
+  );
+}
+
 function useReaderDocument() {
   return useContext(ReaderContext);
 }
@@ -44,11 +79,11 @@ const READER_DICTIONARY = buildBlockConfigurationDictionary({
   //
   Avatar: {
     schema: AvatarPropsSchema,
-    Component: Avatar,
+    Component: AvatarWithAccentDefault,
   },
   Button: {
     schema: ButtonPropsSchema,
-    Component: Button,
+    Component: ButtonWithAccentDefault,
   },
   Divider: {
     schema: DividerPropsSchema,

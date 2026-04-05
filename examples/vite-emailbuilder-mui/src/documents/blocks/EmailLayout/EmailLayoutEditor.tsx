@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { AccentColorContext } from './AccentColorContext';
+
 import { useCurrentBlockId } from '../../editor/EditorBlock';
 import { setDocument, setSelectedBlockId, useDocument } from '../../editor/EditorContext';
 import EditorChildrenIds from '../helpers/EditorChildrenIds';
@@ -31,18 +33,22 @@ function getFontFamily(fontFamily: EmailLayoutProps['fontFamily']) {
 }
 
 export default function EmailLayoutEditor(props: EmailLayoutProps) {
+  const accentColor = props.accentColor ?? null;
+  const textColor = props.textColor ?? '#262626';
+  const linkColor = accentColor ?? textColor;
   const childrenIds = props.childrenIds ?? [];
   const document = useDocument();
   const currentBlockId = useCurrentBlockId();
 
   return (
+    <AccentColorContext.Provider value={accentColor}>
     <div
       onClick={() => {
         setSelectedBlockId(null);
       }}
       style={{
         backgroundColor: props.backdropColor ?? '#F5F5F5',
-        color: props.textColor ?? '#262626',
+        color: textColor,
         fontFamily: getFontFamily(props.fontFamily),
         fontSize: '16px',
         fontWeight: '400',
@@ -54,6 +60,7 @@ export default function EmailLayoutEditor(props: EmailLayoutProps) {
         minHeight: '100%',
       }}
     >
+      <style>{`a { color: ${linkColor}; }`}</style>
       <table
         align="center"
         width="100%"
@@ -99,5 +106,6 @@ export default function EmailLayoutEditor(props: EmailLayoutProps) {
         </tbody>
       </table>
     </div>
+    </AccentColorContext.Provider>
   );
 }

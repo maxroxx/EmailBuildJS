@@ -1,8 +1,9 @@
 import React from 'react';
 import { z } from 'zod';
 
-import { Avatar, AvatarPropsSchema } from '@usewaypoint/block-avatar';
-import { Button, ButtonPropsSchema } from '@usewaypoint/block-button';
+import { Avatar, AvatarProps, AvatarPropsSchema, buildAvatarUrl } from '@usewaypoint/block-avatar';
+import { Button, ButtonProps, ButtonPropsSchema } from '@usewaypoint/block-button';
+import { useAccentColor } from '../blocks/EmailLayout/AccentColorContext';
 import { Divider, DividerPropsSchema } from '@usewaypoint/block-divider';
 import { Heading, HeadingPropsSchema } from '@usewaypoint/block-heading';
 import { Html, HtmlPropsSchema } from '@usewaypoint/block-html';
@@ -23,12 +24,46 @@ import EmailLayoutEditor from '../blocks/EmailLayout/EmailLayoutEditor';
 import EmailLayoutPropsSchema from '../blocks/EmailLayout/EmailLayoutPropsSchema';
 import EditorBlockWrapper from '../blocks/helpers/block-wrappers/EditorBlockWrapper';
 
+const BUTTON_DEFAULT_COLOR = '#999999';
+const AVATAR_DEFAULT_COLOR = '#999999';
+
+function ButtonWithAccentDefault(props: ButtonProps) {
+  const accentColor = useAccentColor();
+  return (
+    <Button
+      {...props}
+      props={{
+        ...props.props,
+        buttonBackgroundColor: props.props?.buttonBackgroundColor ?? accentColor ?? BUTTON_DEFAULT_COLOR,
+      }}
+    />
+  );
+}
+
+function AvatarWithAccentDefault(props: AvatarProps) {
+  const accentColor = useAccentColor();
+  const backgroundColor = props.props?.backgroundColor ?? accentColor ?? AVATAR_DEFAULT_COLOR;
+  const borderColor = props.props?.borderColor ?? undefined;
+  const imageUrl = props.props?.imageUrl || buildAvatarUrl(props.props?.text, backgroundColor);
+  return (
+    <Avatar
+      {...props}
+      props={{
+        ...props.props,
+        imageUrl,
+        borderColor,
+        backgroundColor,
+      }}
+    />
+  );
+}
+
 const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
   Avatar: {
     schema: AvatarPropsSchema,
     Component: (props) => (
       <EditorBlockWrapper>
-        <Avatar {...props} />
+        <AvatarWithAccentDefault {...props} />
       </EditorBlockWrapper>
     ),
   },
@@ -36,7 +71,7 @@ const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
     schema: ButtonPropsSchema,
     Component: (props) => (
       <EditorBlockWrapper>
-        <Button {...props} />
+        <ButtonWithAccentDefault {...props} />
       </EditorBlockWrapper>
     ),
   },

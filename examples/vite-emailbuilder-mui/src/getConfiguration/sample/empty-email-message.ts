@@ -7,6 +7,7 @@ const EMPTY_EMAIL_MESSAGE: TEditorConfiguration = {
       backdropColor: '#F5F5F5',
       canvasColor: '#FFFFFF',
       textColor: '#262626',
+      accentColor: null,
       fontFamily: 'MODERN_SANS',
       childrenIds: [],
     },

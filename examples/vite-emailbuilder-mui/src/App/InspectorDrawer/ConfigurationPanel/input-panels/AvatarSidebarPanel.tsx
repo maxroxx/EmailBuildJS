@@ -6,6 +6,7 @@ import { ToggleButton } from '@mui/material';
 import { AvatarProps, AvatarPropsDefaults, AvatarPropsSchema } from '@usewaypoint/block-avatar';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
+import { NullableColorInput } from './helpers/inputs/ColorInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import SliderInput from './helpers/inputs/SliderInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -30,7 +31,10 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
   const size = data.props?.size ?? AvatarPropsDefaults.size;
   const imageUrl = data.props?.imageUrl ?? AvatarPropsDefaults.imageUrl;
   const alt = data.props?.alt ?? AvatarPropsDefaults.alt;
+  const text = data.props?.text ?? AvatarPropsDefaults.text;
   const shape = data.props?.shape ?? AvatarPropsDefaults.shape;
+  const borderColor = data.props?.borderColor ?? null;
+  const backgroundColor = data.props?.backgroundColor ?? null;
 
   return (
     <BaseSidebarPanel title="Avatar block">
@@ -71,7 +75,24 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
           updateData({ ...data, props: { ...data.props, alt } });
         }}
       />
+      <TextInput
+        label="Avatar text"
+        defaultValue={text}
+        onChange={(text) => {
+          updateData({ ...data, props: { ...data.props, text } });
+        }}
+      />
 
+      <NullableColorInput
+        label="Border color"
+        defaultValue={borderColor}
+        onChange={(borderColor) => updateData({ ...data, props: { ...data.props, borderColor } })}
+      />
+      <NullableColorInput
+        label="Background color"
+        defaultValue={backgroundColor}
+        onChange={(backgroundColor) => updateData({ ...data, props: { ...data.props, backgroundColor } })}
+      />
       <MultiStylePropertyPanel
         names={['textAlign', 'padding']}
         value={data.style}

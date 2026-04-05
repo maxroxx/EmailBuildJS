@@ -67,6 +67,11 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
         defaultValue={data.textColor ?? '#262626'}
         onChange={(textColor) => updateData({ ...data, textColor })}
       />
+      <NullableColorInput
+        label="Accent color"
+        defaultValue={data.accentColor ?? null}
+        onChange={(accentColor) => updateData({ ...data, accentColor })}
+      />
     </BaseSidebarPanel>
   );
 }
