@@ -5,6 +5,7 @@ import { Stack, useTheme } from '@mui/material';
 import { useInspectorDrawerOpen, useSamplesDrawerOpen } from '../documents/editor/EditorContext';
 
 import InspectorDrawer, { INSPECTOR_DRAWER_WIDTH } from './InspectorDrawer';
+import HostBridge from './HostBridge';
 import SamplesDrawer, { SAMPLES_DRAWER_WIDTH } from './SamplesDrawer';
 import TemplatePanel from './TemplatePanel';
 
@@ -25,6 +26,7 @@ export default function App() {
 
   return (
     <>
+      <HostBridge />
       <InspectorDrawer />
       <SamplesDrawer />
 

@@ -31,8 +31,24 @@ export function useDocument() {
   return editorStateStore((s) => s.document);
 }
 
+export function getDocument() {
+  return editorStateStore.getState().document;
+}
+
 export function useSelectedBlockId() {
   return editorStateStore((s) => s.selectedBlockId);
+}
+
+export function getSelectedBlockId() {
+  return editorStateStore.getState().selectedBlockId;
+}
+
+export function subscribeDocument(callback: (document: TEditorConfiguration) => void) {
+  return editorStateStore.subscribe((state, previousState) => {
+    if (state.document !== previousState.document) {
+      callback(state.document);
+    }
+  });
 }
 
 export function useSelectedScreenSize() {
