@@ -10,17 +10,28 @@
       "require": "./dist/index.js",
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
+    },
+    "./LexicalEditor": {
+      "require": "./dist/LexicalEditor.js",
+      "import": "./dist/LexicalEditor.mjs",
+      "types": "./dist/LexicalEditor.d.ts"
+    },
+    "./EditorToolbar": {
+      "require": "./dist/EditorToolbar.js",
+      "import": "./dist/EditorToolbar.mjs",
+      "types": "./dist/EditorToolbar.d.ts"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup ./src/index.tsx --outDir dist --format cjs,esm --dts"
+    "build": "tsup ./src/index.tsx ./src/LexicalEditor.tsx ./src/EditorToolbar.tsx --outDir dist --format cjs,esm --dts --external lexical --external @lexical/react --external @lexical/link --external @lexical/rich-text --external @lexical/html"
   },
   "author": "carlos@usewaypoint.com",
   "license": "MIT",
   "peerDependencies": {
+    "@mui/material": "^5.0.0",
     "react": "^16 || ^17 || ^18",
     "zod": "^1 || ^2 || ^3"
   },
@@ -29,7 +40,12 @@
     "@types/insane": "^1.0.0"
   },
   "dependencies": {
+    "@lexical/html": "^0.18.0",
+    "@lexical/link": "^0.18.0",
+    "@lexical/react": "^0.18.0",
+    "@lexical/rich-text": "^0.18.0",
     "insane": "^2.6.2",
+    "lexical": "^0.18.0",
     "marked": "^12.0.2"
   }
 }
