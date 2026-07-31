@@ -22,7 +22,7 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npx tsc",
+    "build": "npm run build -w packages/*",
     "test": "npx jest"
   },
   "author": "carlos@usewaypoint.com",
