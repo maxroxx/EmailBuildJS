@@ -5,65 +5,21 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getRoot, LineBreakNode } from 'lexical';
+import { LineBreakNode } from 'lexical';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { LinkNode } from '@lexical/link';
 
-import { LexicalEditorState, LexicalNode, LexicalTextNode } from '.';
+import { LexicalEditorState, LexicalNode } from '.';
 import { EditorToolbar } from './EditorToolbar';
 
 // =============================================================================
-// Lexical Initial State Converter
+// Simple ErrorBoundary for Lexical plugins
 // =============================================================================
 
-function createInitialEditorState(lexical: LexicalEditorState | null) {
-  if (!lexical) {
-    return JSON.stringify({
-      root: {
-        children: [
-          {
-            children: [],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            type: 'paragraph',
-            version: 1,
-          },
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
-        type: 'root',
-        version: 1,
-      },
-    });
-  }
-
-  return JSON.stringify({
-    root: {
-      children: (lexical.root.children || []).map((child: LexicalNode) => ({
-        type: child.type || 'paragraph',
-        format: child.format?.toString?.() || '',
-        indent: child.indent || 0,
-        direction: child.direction || 'ltr',
-        children: (child.children || []).map((grandchild: LexicalNode) => ({
-          type: grandchild.type || 'text',
-          format: grandchild.format?.toString?.() || '0',
-          mode: (grandchild as LexicalTextNode).mode || 'normal',
-          style: (grandchild as LexicalTextNode).style || '',
-          text: (grandchild as LexicalTextNode).text || '',
-          version: grandchild.version || 1,
-        })),
-        version: child.version || 1,
-      })),
-      direction: lexical.root.direction || 'ltr',
-      format: lexical.root.format?.toString?.() || '',
-      indent: lexical.root.indent || 0,
-      type: 'root',
-      version: lexical.root.version || 1,
-    },
-  });
+function LexicalErrorBoundary({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
+
 
 // =============================================================================
 // Internal: Sync external content changes into the editor
@@ -174,7 +130,6 @@ function LexicalEditorInner({
 }: LexicalEditorProps & { isInternalRef: React.MutableRefObject<boolean> }) {
   const [editor] = useLexicalComposerContext();
   const prevContentRef = useRef<LexicalEditorState | null>(null);
-  const placeholderRef = useRef<HTMLDivElement>(null);
 
   useLexicalEditorContent(initialContent, isInternalRef);
 
@@ -193,19 +148,6 @@ function LexicalEditorInner({
 
   useLexicalOnChange(editor, handleChange);
 
-  // Track if editor content is empty to show/hide placeholder
-  useEffect(() => {
-    return editor.registerUpdateListener(() => {
-      editor.read(() => {
-        const root = $getRoot();
-        const text = root.getTextContent();
-        if (placeholderRef.current) {
-          placeholderRef.current.style.display = text.trim() === '' ? 'block' : 'none';
-        }
-      });
-    });
-  }, [editor]);
-
   const contentEditableStyle: React.CSSProperties = {
     minHeight: 120,
     padding: '8px 12px',
@@ -222,24 +164,10 @@ function LexicalEditorInner({
     <div style={{ position: 'relative' }}>
       <RichTextPlugin
         contentEditable={<ContentEditable style={contentEditableStyle} />}
+        placeholder={<div style={{ color: '#999', padding: '8px 12px' }}>{placeholder}</div>}
+        ErrorBoundary={LexicalErrorBoundary}
       />
-      <div
-        ref={placeholderRef}
-        style={{
-          color: '#999',
-          pointerEvents: 'none',
-          padding: '8px 12px',
-          position: 'absolute',
-          top: 1,
-          left: 1,
-          right: 1,
-          fontSize: 14,
-          lineHeight: 1.5,
-          userSelect: 'none',
-        }}
-      >
-        {placeholder}
-      </div>
+
       <LinkPlugin />
       <HistoryPlugin />
     </div>

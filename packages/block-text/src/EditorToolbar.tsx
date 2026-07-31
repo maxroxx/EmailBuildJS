@@ -1,12 +1,26 @@
-import React from 'react';
-import { IconButton, Tooltip, Box, TextField, Button } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { IconButton, Tooltip, Box, TextField, Button, Popover, Typography } from '@mui/material';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
-import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, IS_BOLD, IS_ITALIC, IS_UNDERLINE, IS_STRIKETHROUGH, $createTextNode } from 'lexical';
+import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, IS_BOLD, IS_ITALIC, IS_UNDERLINE, IS_STRIKETHROUGH, $createTextNode, $createParagraphNode, LexicalNode } from 'lexical';
 import { $createHeadingNode } from '@lexical/rich-text';
 import { $createQuoteNode } from '@lexical/rich-text';
 import { $createLinkNode } from '@lexical/link';
-import { $createParagraphNode } from 'lexical';
+
+// =============================================================================
+// Helper: Walk up parent chain to find a LinkNode
+// =============================================================================
+
+function findLinkNode(node: LexicalNode | null): LexicalNode | null {
+  let current: LexicalNode | null = node;
+  while (current !== null) {
+    if (current.getType() === 'link') {
+      return current;
+    }
+    current = current.getParent();
+  }
+  return null;
+}
 
 // =============================================================================
 // Toolbar Button Component
@@ -50,11 +64,11 @@ function ToolbarButton({ active, onClick, tooltip, label }: ToolbarButtonProps) 
 export function EditorToolbar() {
   const [editor] = useLexicalComposerContext();
   const editable = useLexicalEditable();
-  const [showLinkInput, setShowLinkInput] = React.useState(false);
-  const [linkUrl, setLinkUrl] = React.useState('https://');
-  const linkInputRef = React.useRef<HTMLInputElement>(null);
+  const [popoverAnchorEl, setPopoverAnchorEl] = useState<HTMLElement | null | SVGElement>(null);
+  const [linkUrl, setLinkUrl] = useState('https://');
+  const linkInputRef = useRef<HTMLInputElement>(null);
 
-  const [formats, setFormats] = React.useState({
+  const [formats, setFormats] = useState({
     bold: false,
     italic: false,
     underline: false,
@@ -63,6 +77,8 @@ export function EditorToolbar() {
     heading2: false,
     quote: false,
     paragraph: false,
+    link: false,
+    linkUrl: '',
   });
 
   React.useEffect(() => {
@@ -72,7 +88,7 @@ export function EditorToolbar() {
         const isRange = $isRangeSelection(selection);
 
         if (!isRange) {
-          setFormats({ bold: false, italic: false, underline: false, strikethrough: false, heading: false, heading2: false, quote: false, paragraph: false });
+          setFormats({ bold: false, italic: false, underline: false, strikethrough: false, heading: false, heading2: false, quote: false, paragraph: false, link: false, linkUrl: '' });
           return;
         }
 
@@ -103,6 +119,15 @@ export function EditorToolbar() {
           }
         }
 
+        let hasLink = false;
+        let linkUrlValue = '';
+
+        const linkNode = findLinkNode(node);
+        if (linkNode) {
+          hasLink = true;
+          linkUrlValue = (linkNode as any).getURL?.() || '';
+        }
+
         setFormats({
           bold: hasBold,
           italic: hasItalic,
@@ -112,6 +137,8 @@ export function EditorToolbar() {
           heading2: parentType === 'heading2',
           quote: parentType === 'quote',
           paragraph: parentType === 'paragraph',
+          link: hasLink,
+          linkUrl: linkUrlValue,
         });
       });
     });
@@ -164,7 +191,6 @@ export function EditorToolbar() {
         if (parentElement && parentElement.getType() === 'heading') {
           const tag = (parentElement as any).__tag;
           if (tag === 'h1') {
-            // h1 → paragraph
             const paragraph = $createParagraphNode();
             parentElement.getChildren().forEach((child: any) => {
               paragraph.append(child);
@@ -172,7 +198,6 @@ export function EditorToolbar() {
             parentElement.replace(paragraph);
             paragraph.select(0, 0);
           } else {
-            // h2 → h1
             const headingNode = $createHeadingNode('h1');
             parentElement.getChildren().forEach((child: any) => {
               headingNode.append(child);
@@ -181,7 +206,6 @@ export function EditorToolbar() {
             headingNode.select(0, 0);
           }
         } else {
-          // paragraph → h1
           const headingNode = $createHeadingNode('h1');
           parentElement?.getChildren().forEach((child: any) => {
             headingNode.append(child);
@@ -204,7 +228,6 @@ export function EditorToolbar() {
         if (parentElement && parentElement.getType() === 'heading') {
           const tag = (parentElement as any).__tag;
           if (tag === 'h2') {
-            // h2 → paragraph
             const paragraph = $createParagraphNode();
             parentElement.getChildren().forEach((child: any) => {
               paragraph.append(child);
@@ -212,7 +235,6 @@ export function EditorToolbar() {
             parentElement.replace(paragraph);
             paragraph.select(0, 0);
           } else {
-            // h1 → h2
             const headingNode = $createHeadingNode('h2');
             parentElement.getChildren().forEach((child: any) => {
               headingNode.append(child);
@@ -221,7 +243,6 @@ export function EditorToolbar() {
             headingNode.select(0, 0);
           }
         } else {
-          // paragraph → h2
           const headingNode = $createHeadingNode('h2');
           parentElement?.getChildren().forEach((child: any) => {
             headingNode.append(child);
@@ -276,29 +297,63 @@ export function EditorToolbar() {
           parentElement.replace(paragraph);
           paragraph.select(0, 0);
         } else if (parentElement && parentElement.getType() === 'paragraph') {
-          // Already a paragraph, no-op but select it
           parentElement.select(0, 0);
         }
       }
     });
   };
 
+  const openLinkInput = (e: React.MouseEvent<HTMLElement | SVGElement>) => {
+    setPopoverAnchorEl(e.currentTarget);
+    setTimeout(() => linkInputRef.current?.focus(), 0);
+  };
+
+  const closeLinkInput = () => {
+    setPopoverAnchorEl(null);
+    setLinkUrl('https://');
+  };
+
   const handleInsertLink = (url: string) => {
     editor.update(() => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
-        const linkNode = $createLinkNode(url);
-        const selectedText = selection.getTextContent();
-        if (selectedText) {
-          const textNode = $createTextNode(selectedText);
-          linkNode.append(textNode);
+        const anchorNode = selection.anchor.getNode();
+        const existingLink = findLinkNode(anchorNode);
+
+        if (existingLink) {
+          (existingLink as any).setURL(url);
+        } else {
+          const linkNode = $createLinkNode(url);
+          const selectedText = selection.getTextContent();
+          if (selectedText) {
+            const textNode = $createTextNode(selectedText);
+            linkNode.append(textNode);
+          }
+          selection.insertNodes([linkNode]);
+          linkNode.select();
         }
-        selection.insertNodes([linkNode]);
-        linkNode.select();
       }
     });
-    setShowLinkInput(false);
-    setLinkUrl('https://');
+    closeLinkInput();
+  };
+
+  const removeLink = () => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        const anchorNode = selection.anchor.getNode();
+        const existingLink = findLinkNode(anchorNode);
+        if (existingLink) {
+          const linkNode = existingLink;
+          const children = (linkNode as any).getChildren();
+          children.forEach((child: LexicalNode) => {
+            linkNode.insertBefore(child);
+          });
+          linkNode.remove();
+        }
+      }
+    });
+    closeLinkInput();
   };
 
   const handleLinkKeyDown = (e: React.KeyboardEvent) => {
@@ -306,16 +361,13 @@ export function EditorToolbar() {
       e.preventDefault();
       handleInsertLink(linkUrl);
     } else if (e.key === 'Escape') {
-      setShowLinkInput(false);
-      setLinkUrl('https://');
+      closeLinkInput();
     }
   };
 
-  const openLinkInput = () => {
-    setShowLinkInput(true);
-    setLinkUrl('https://');
-    setTimeout(() => linkInputRef.current?.focus(), 0);
-  };
+  const isOpen = Boolean(popoverAnchorEl);
+  const hasExistingLink = formats.link;
+  const existingLinkUrl = formats.linkUrl;
 
   return (
     <>
@@ -392,7 +444,7 @@ export function EditorToolbar() {
                 onClick={openLinkInput}
                 disabled={!editable}
                 sx={{
-                  color: '#333',
+                  color: formats.link ? '#0079cc' : '#333',
                   '&:hover': { backgroundColor: '#f5f5f5' },
                   minWidth: 32,
                   width: 32,
@@ -405,28 +457,57 @@ export function EditorToolbar() {
             </span>
           </Tooltip>
         </Box>
+      </Box>
 
-        {/* Inline link input */}
-        {showLinkInput && (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
-            <TextField
-              inputRef={linkInputRef}
-              size="small"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              onKeyDown={handleLinkKeyDown}
-              placeholder="https://example.com"
-              sx={{ width: 220 }}
-            />
-            <Button size="small" variant="contained" onClick={() => handleInsertLink(linkUrl)}>
-              Insert
-            </Button>
-            <Button size="small" onClick={() => { setShowLinkInput(false); setLinkUrl('https://'); }}>
+      {/* Popover for link input */}
+      <Popover
+        open={isOpen}
+        anchorEl={popoverAnchorEl}
+        onClose={closeLinkInput}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        sx={{ marginTop: 4 }}
+      >
+        <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1, minWidth: 320 }}>
+          <Typography variant="subtitle2" sx={{ color: '#666' }}>
+            {hasExistingLink ? 'Edit Link' : 'Insert Link'}
+          </Typography>
+          {hasExistingLink && (
+            <Typography variant="caption" sx={{ color: '#0079cc', wordBreak: 'break-all' }}>
+              Current: {existingLinkUrl}
+            </Typography>
+          )}
+          <TextField
+            inputRef={linkInputRef}
+            size="small"
+            fullWidth
+            value={hasExistingLink ? existingLinkUrl : linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            onKeyDown={handleLinkKeyDown}
+            placeholder="https://example.com"
+          />
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {hasExistingLink && (
+              <Button size="small" variant="outlined" onClick={removeLink} sx={{ color: '#d32f2f', borderColor: '#d32f2f' }}>
+                Remove
+              </Button>
+            )}
+            <Box sx={{ flexGrow: 1 }} />
+            <Button size="small" onClick={closeLinkInput}>
               Cancel
             </Button>
+            <Button size="small" variant="contained" onClick={() => handleInsertLink(linkUrl)}>
+              {hasExistingLink ? 'Update' : 'Insert'}
+            </Button>
           </Box>
-        )}
-      </Box>
+        </Box>
+      </Popover>
     </>
   );
 }
