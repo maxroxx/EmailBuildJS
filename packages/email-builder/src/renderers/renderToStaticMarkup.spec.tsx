@@ -21,7 +21,7 @@ describe('renderToStaticMarkup', () => {
       },
       { rootBlockId: 'root' }
     );
-    expect(result).toEqual('<!DOCTYPE html><html><body><div></div></body></html>');
+    expect(result).toEqual('<!DOCTYPE html><html><head></head><body><div></div></body></html>');
   });
 
   describe('2-column layout', () => {
@@ -143,10 +143,10 @@ describe('renderToStaticMarkup', () => {
         { rootBlockId: 'root' }
       );
       expect(result).toContain('class="mj-column-wrapper"');
-      expect(result).toContain('style="font-size:0;text-align:left"');
+      expect(result).toContain('style="display:table;width:100%;table-layout:fixed;text-align:left"');
       expect(result).toContain('mj-column-per-50');
-      expect(result).toContain('display:inline-block');
-      expect(result).toContain('max-width:300px');
+      expect(result).toContain('display:table-cell');
+      expect(result).toContain('width:50%;max-width:50%');
     });
 
     it('includes ghost tables with mso conditional comments', () => {
@@ -269,9 +269,10 @@ describe('renderToStaticMarkup', () => {
         },
         { rootBlockId: 'root' }
       );
-      expect(result).toContain('@media only screen and (min-width:480px)');
-      expect(result).toContain('width: 50% !important');
-      expect(result).toContain('max-width: 50% !important');
+      expect(result).toContain('@media only screen and (max-width:480px)');
+      expect(result).toContain('display: block !important');
+      expect(result).toContain('width: 100% !important');
+      expect(result).toContain('max-width: 100% !important');
     });
   });
 
@@ -422,7 +423,7 @@ describe('renderToStaticMarkup', () => {
       // 3 columns = 2 separators between them
       const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
       expect(separatorCount).toBe(2);
-      expect(result).toContain('width: 33.333333333333% !important');
+      expect(result).toContain('width:33.333333333333%;max-width:33.333333333333%');
     });
   });
 

@@ -43,9 +43,9 @@ export default function ColumnsContainerEditor({ style, props }: ColumnsContaine
       style={style}
       mobile={screenSize === 'mobile'}
       columns={[
-        <EditorChildrenIds childrenIds={columns?.[0]?.childrenIds} onChange={(change) => updateColumn(0, change)} />,
-        <EditorChildrenIds childrenIds={columns?.[1]?.childrenIds} onChange={(change) => updateColumn(1, change)} />,
-        <EditorChildrenIds childrenIds={columns?.[2]?.childrenIds} onChange={(change) => updateColumn(2, change)} />,
+        <EditorChildrenIds showTrailingButton={false} showLeadingButton={false} childrenIds={columns?.[0]?.childrenIds} onChange={(change) => updateColumn(0, change)} />,
+        <EditorChildrenIds showTrailingButton={false} showLeadingButton={false} childrenIds={columns?.[1]?.childrenIds} onChange={(change) => updateColumn(1, change)} />,
+        <EditorChildrenIds showTrailingButton={false} showLeadingButton={false} childrenIds={columns?.[2]?.childrenIds} onChange={(change) => updateColumn(2, change)} />,
       ]}
     />
   );

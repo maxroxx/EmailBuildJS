@@ -135,19 +135,53 @@ function getColumnClasses(html: string): Set<string> {
   return classes;
 }
 
-function generateMediaQueries(classes: Set<string>): string {
-  if (classes.size === 0) return '';
+function escapeCssClass(className: string): string {
+  return className.replace(/\./g, '\\.');
+}
 
-  const rules = Array.from(classes).map((className) => {
-    const match = className.match(/mj-column-per-([\d.]+)/);
-    if (!match) return '';
-    const percentage = match[1];
-    return `  .${className} {\n    width: ${percentage}% !important;\n    max-width: ${percentage}% !important;\n  }`;
+function fixInlineColumnStyles(html: string): string {
+  return html.replace(/<div(\s+[^>]*?class="[^"]*mj-column-per-([\d.]+)[^"]*"[^>]*?)>/g, (fullMatch, _attrs, percentage) => {
+    const styleMatch = fullMatch.match(/style="([^"]*)"/);
+    if (!styleMatch) return fullMatch;
+
+    const styleContent = styleMatch[1];
+    const fixedStyle = styleContent
+      .replace(/display:\s*[^;]*;?\s*/g, '')
+      .replace(/max-width:\s*[^;]*;?\s*/g, '')
+      .replace(/width:\s*[^;]*;?\s*/g, '');
+
+    const newStyle = `display:table-cell;width:${percentage}%;max-width:${percentage}%;${fixedStyle}`;
+    const cleanedStyle = newStyle
+      .replace(/\s{2,}/g, ' ')
+      .replace(/;\s*;/g, ';')
+      .replace(/^;\s*/, '')
+      .replace(/\s*;$/, '');
+
+    return fullMatch.replace(/style="[^"]*"/, `style="${cleanedStyle}"`);
+  });
+}
+
+function fixColumnWrapperStyle(html: string): string {
+  return html.replace(
+    /<div class="mj-column-wrapper" style="font-size:0;text-align:left">/g,
+    '<div class="mj-column-wrapper" style="display:table;width:100%;table-layout:fixed;text-align:left">'
+  );
+}
+
+function generateResponsiveStyles(classes: Set<string>): string {
+  if (classes.size === 0) return '';
+  const mobileRules = Array.from(classes).map((className) => {
+    const escapedClass = escapeCssClass(className);
+    return `  .${escapedClass} {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }`;
   }).filter(Boolean);
 
   return `<style type="text/css">
-@media only screen and (min-width:480px) {
-${rules.join('\n')}
+@media only screen and (max-width:480px) {
+${mobileRules.join('\n')}
 }
 </style>`;
 }
@@ -156,8 +190,12 @@ function injectStyles(html: string): string {
   const classes = getColumnClasses(html);
   if (classes.size === 0) return html;
 
-  const mediaQueries = generateMediaQueries(classes);
-  return html.replace('</body>', `${mediaQueries}</body>`);
+  const fixedHtml = fixColumnWrapperStyle(fixInlineColumnStyles(html));
+  const responsiveStyles = generateResponsiveStyles(classes);
+  if (fixedHtml.includes('</head>')) {
+    return fixedHtml.replace('</head>', `${responsiveStyles}</head>`);
+  }
+  return fixedHtml.replace('<body>', `${responsiveStyles}<body>`);
 }
 
 export default function renderToStaticMarkup(document: TReaderDocument, { rootBlockId }: TOptions) {
@@ -167,6 +205,7 @@ export default function renderToStaticMarkup(document: TReaderDocument, { rootBl
       addGhostTables(
         baseRenderToStaticMarkup(
           <html>
+            <head />
             <body>
               <Reader document={document} rootBlockId={rootBlockId} />
             </body>
