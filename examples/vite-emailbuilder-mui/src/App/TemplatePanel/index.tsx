@@ -62,7 +62,7 @@ export default function TemplatePanel() {
       case 'preview':
         return (
           <Box sx={mainBoxSx}>
-            <Reader document={document} rootBlockId="root" />
+            <Reader document={document} rootBlockId="root" screenSize={selectedScreenSize} />
           </Box>
         );
       case 'html':

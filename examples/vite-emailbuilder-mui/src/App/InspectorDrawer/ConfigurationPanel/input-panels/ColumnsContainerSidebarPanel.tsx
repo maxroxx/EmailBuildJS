@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ZodError } from 'zod';
 
 import {
-  SpaceBarOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignCenterOutlined,
   VerticalAlignTopOutlined,
@@ -16,7 +15,6 @@ import ColumnsContainerPropsSchema, {
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
-import SliderInput from './helpers/inputs/SliderInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
 type ColumnsContainerPanelProps = {
@@ -41,7 +39,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         label="Number of columns"
         defaultValue={data.props?.columnsCount === 2 ? '2' : '3'}
         onChange={(v) => {
-          updateData({ ...data, props: { ...data.props, columnsCount: v === '2' ? 2 : 3 } });
+          updateData({ ...data, props: { ...data.props, columnsCount: v === '2' ? 2 : 3, fixedWidths: [null, null, null] } });
         }}
       >
         <ToggleButton value="2">2</ToggleButton>
@@ -52,17 +50,6 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         onChange={(fixedWidths) => {
           updateData({ ...data, props: { ...data.props, fixedWidths } });
         }}
-      />
-      <SliderInput
-        label="Columns gap"
-        iconLabel={<SpaceBarOutlined sx={{ color: 'text.secondary' }} />}
-        units="px"
-        step={4}
-        marks
-        min={0}
-        max={80}
-        defaultValue={data.props?.columnsGap ?? 0}
-        onChange={(columnsGap) => updateData({ ...data, props: { ...data.props, columnsGap } })}
       />
       <RadioGroupInput
         label="Alignment"
@@ -83,7 +70,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
       </RadioGroupInput>
 
       <MultiStylePropertyPanel
-        names={['backgroundColor', 'padding']}
+        names={['backgroundColor']}
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
