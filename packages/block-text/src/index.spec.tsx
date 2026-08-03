@@ -3,7 +3,7 @@ import React from 'react';
 import { describe, expect, it } from '@jest/globals';
 import { render } from '@testing-library/react';
 
-import { Text, lexicalToHTML, normalizeTextProps, LexicalEditorState, createEmptyLexicalState, LexicalTextNode } from '.';
+import { createEmptyLexicalState, LexicalEditorState, LexicalTextNode,lexicalToHTML, normalizeTextProps, Text } from '.';
 
 // =============================================================================
 // Legacy behavior tests (backward compatibility)
@@ -593,10 +593,10 @@ Powered by [Waypoint](https://usewaypoint.com)`,
   describe('createEmptyLexicalState', () => {
     it('returns valid empty lexical state', () => {
       const state = createEmptyLexicalState();
-      expect(state.root.type).toBe('paragraph');
+      expect(state.root.type).toBe('root');
       expect(state.root.children.length).toBe(1);
-      expect(state.root.children[0].type).toBe('text');
-      expect((state.root.children[0] as LexicalTextNode).text).toBe('');
+      expect(state.root.children[0].type).toBe('paragraph');
+      expect(state.root.children[0].children).toEqual([]);
     });
   });
 });

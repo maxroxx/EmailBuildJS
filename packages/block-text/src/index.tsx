@@ -124,16 +124,16 @@ function escapeHTML(text: string): string {
 function parseLexicalFormat(formatValue: number | string | undefined): string {
   const styles: string[] = [];
   if (typeof formatValue === 'number') {
-    if (formatValue & FORMAT_BOLD) styles.push('font-weight:bold');
-    if (formatValue & FORMAT_ITALIC) styles.push('font-style:italic');
-    if (formatValue & FORMAT_UNDERLINE) styles.push('text-decoration:underline');
-    if (formatValue & FORMAT_STRIKETHROUGH) styles.push('text-decoration:line-through');
+    if (formatValue & FORMAT_BOLD) {styles.push('font-weight:bold');}
+    if (formatValue & FORMAT_ITALIC) {styles.push('font-style:italic');}
+    if (formatValue & FORMAT_UNDERLINE) {styles.push('text-decoration:underline');}
+    if (formatValue & FORMAT_STRIKETHROUGH) {styles.push('text-decoration:line-through');}
   } else if (typeof formatValue === 'string') {
     const formats = formatValue.split(' ');
-    if (formats.includes('bold') || formats.includes('Bold')) styles.push('font-weight:bold');
-    if (formats.includes('italic') || formats.includes('Italic')) styles.push('font-style:italic');
-    if (formats.includes('underline') || formats.includes('Underline')) styles.push('text-decoration:underline');
-    if (formats.includes('strikethrough') || formats.includes('Strikethrough')) styles.push('text-decoration:line-through');
+    if (formats.includes('bold') || formats.includes('Bold')) {styles.push('font-weight:bold');}
+    if (formats.includes('italic') || formats.includes('Italic')) {styles.push('font-style:italic');}
+    if (formats.includes('underline') || formats.includes('Underline')) {styles.push('text-decoration:underline');}
+    if (formats.includes('strikethrough') || formats.includes('Strikethrough')) {styles.push('text-decoration:line-through');}
   }
   return styles.join(';');
 }
@@ -148,7 +148,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
     ? `${parentStyles};${nodeStyles}`
     : nodeStyles;
 
-  const children = (node as any).children || [];
+  const children = node.children || [];
 
   switch (node.type) {
     case 'text': {
@@ -166,7 +166,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
     }
 
     case 'heading': {
-      const tag = (node as any).tag || 'h1';
+      const tag = (node as LexicalNode & { tag?: string }).tag || 'h1';
       const inner = children.map((child: LexicalNode) => renderLexicalNode(child, combinedStyles)).join('');
       const fontSize = tag === 'h1' ? '32px' : '24px';
       return `<${tag} style="margin:0;font-size:${fontSize};font-weight:bold;">${inner}</${tag}>`;
@@ -197,7 +197,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
 }
 
 export function lexicalToHTML(lexical: LexicalEditorState): string {
-  if (!lexical || !lexical.root) return '';
+  if (!lexical || !lexical.root) {return '';}
   return renderLexicalNode(lexical.root as LexicalNode);
 }
 

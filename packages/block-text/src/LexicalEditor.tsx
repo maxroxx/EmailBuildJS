@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { LineBreakNode } from 'lexical';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+
 import { LinkNode } from '@lexical/link';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 
 import { LexicalEditorState, LexicalNode } from '.';
 import { EditorToolbar } from './EditorToolbar';
@@ -36,7 +37,7 @@ function useLexicalEditorContent(
       isInternalRef.current = false;
       return;
     }
-    if (!initialContent) return;
+    if (!initialContent) {return;}
 
     const json = JSON.stringify(initialContent);
     const editorState = editor.parseEditorState(json);
@@ -55,7 +56,7 @@ function useLexicalOnChange(
   useEffect(() => {
     return editor.registerUpdateListener(() => {
       const serialized = editor.toJSON();
-      if (!serialized.editorState?.root) return;
+      if (!serialized.editorState?.root) {return;}
       const lexical: LexicalEditorState = {
         root: serialized.editorState.root as unknown as LexicalNode,
       };
@@ -124,7 +125,6 @@ function LexicalEditorInner({
   initialContent,
   onChange,
   placeholder,
-  editable,
   style,
   isInternalRef,
 }: LexicalEditorProps & { isInternalRef: React.MutableRefObject<boolean> }) {

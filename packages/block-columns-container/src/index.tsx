@@ -168,7 +168,7 @@ function getEqualMaxWidth(index: number, { columnsCount, fixedWidths, innerWidth
 }
 
 function getColumnClass(columnsCount: number, maxWidth: number | undefined, innerWidth: number): string {
-  if (!maxWidth) return '';
+  if (!maxWidth) {return '';}
   const percentage = (maxWidth / innerWidth) * 100;
   const roundedPercentage = Math.round(percentage * 1e12) / 1e12;
   return `mj-column-per-${roundedPercentage}`;

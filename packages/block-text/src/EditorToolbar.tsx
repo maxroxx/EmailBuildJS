@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { IconButton, Tooltip, Box, TextField, Button, Popover, Typography } from '@mui/material';
+import { $createParagraphNode, $createTextNode, $getSelection, $isRangeSelection, ElementNode, FORMAT_TEXT_COMMAND, IS_BOLD, IS_ITALIC, IS_STRIKETHROUGH, IS_UNDERLINE, LexicalNode } from 'lexical';
+import React, { useRef,useState } from 'react';
+
+import { $createLinkNode } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useLexicalEditable } from '@lexical/react/useLexicalEditable';
-import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, IS_BOLD, IS_ITALIC, IS_UNDERLINE, IS_STRIKETHROUGH, $createTextNode, $createParagraphNode, LexicalNode } from 'lexical';
-import { $createHeadingNode } from '@lexical/rich-text';
-import { $createQuoteNode } from '@lexical/rich-text';
-import { $createLinkNode } from '@lexical/link';
+import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
+import { Box, Button, IconButton, Popover, TextField, Tooltip, Typography } from '@mui/material';
 
 // =============================================================================
 // Helper: Walk up parent chain to find a LinkNode
@@ -96,26 +96,28 @@ export function EditorToolbar() {
         const node = anchor.getNode();
 
         const textNode = node;
-        const hasBold = Boolean((textNode as any).__format & IS_BOLD);
-        const hasItalic = Boolean((textNode as any).__format & IS_ITALIC);
-        const hasUnderline = Boolean((textNode as any).__format & IS_UNDERLINE);
-        const hasStrikethrough = Boolean((textNode as any).__format & IS_STRIKETHROUGH);
+        const textNodeWithFormat = textNode as unknown as { __format?: number };
+        const hasBold = Boolean((textNodeWithFormat.__format ?? 0) & IS_BOLD);
+        const hasItalic = Boolean((textNodeWithFormat.__format ?? 0) & IS_ITALIC);
+        const hasUnderline = Boolean((textNodeWithFormat.__format ?? 0) & IS_UNDERLINE);
+        const hasStrikethrough = Boolean((textNodeWithFormat.__format ?? 0) & IS_STRIKETHROUGH);
 
-        const parentElement = (textNode as any).__parent;
+        const parentElement = textNode as unknown as ElementNode;
         let parentType: string | null = null;
         if (parentElement) {
-          let currentParent: any = parentElement;
+          let currentParent: unknown = parentElement;
           while (currentParent) {
-            if (currentParent.__type === 'heading') {
-              const tag = (currentParent as any).__tag;
+            const cp = currentParent as ElementNode;
+            if (cp.__type === 'heading') {
+              const tag = (cp as unknown as { __tag?: string }).__tag;
               parentType = tag === 'h2' ? 'heading2' : 'heading';
               break;
             }
-            if (currentParent.__type === 'quote') {
+            if (cp.__type === 'quote') {
               parentType = 'quote';
               break;
             }
-            currentParent = currentParent.__parent;
+            currentParent = (cp as unknown as { __parent?: unknown }).__parent;
           }
         }
 
@@ -125,7 +127,7 @@ export function EditorToolbar() {
         const linkNode = findLinkNode(node);
         if (linkNode) {
           hasLink = true;
-          linkUrlValue = (linkNode as any).getURL?.() || '';
+          linkUrlValue = (linkNode as unknown as { getURL?: () => string }).getURL?.() || '';
         }
 
         setFormats({
@@ -189,17 +191,17 @@ export function EditorToolbar() {
         const parentElement = node.getParent();
 
         if (parentElement && parentElement.getType() === 'heading') {
-          const tag = (parentElement as any).__tag;
+          const tag = (parentElement as unknown as { __tag?: string }).__tag;
           if (tag === 'h1') {
             const paragraph = $createParagraphNode();
-            parentElement.getChildren().forEach((child: any) => {
+            parentElement.getChildren().forEach((child: LexicalNode) => {
               paragraph.append(child);
             });
             parentElement.replace(paragraph);
             paragraph.select(0, 0);
           } else {
             const headingNode = $createHeadingNode('h1');
-            parentElement.getChildren().forEach((child: any) => {
+            parentElement.getChildren().forEach((child: LexicalNode) => {
               headingNode.append(child);
             });
             parentElement.replace(headingNode);
@@ -207,7 +209,7 @@ export function EditorToolbar() {
           }
         } else {
           const headingNode = $createHeadingNode('h1');
-          parentElement?.getChildren().forEach((child: any) => {
+          parentElement?.getChildren().forEach((child: LexicalNode) => {
             headingNode.append(child);
           });
           parentElement?.replace(headingNode);
@@ -226,17 +228,17 @@ export function EditorToolbar() {
         const parentElement = node.getParent();
 
         if (parentElement && parentElement.getType() === 'heading') {
-          const tag = (parentElement as any).__tag;
+          const tag = (parentElement as unknown as { __tag?: string }).__tag;
           if (tag === 'h2') {
             const paragraph = $createParagraphNode();
-            parentElement.getChildren().forEach((child: any) => {
+            parentElement.getChildren().forEach((child: LexicalNode) => {
               paragraph.append(child);
             });
             parentElement.replace(paragraph);
             paragraph.select(0, 0);
           } else {
             const headingNode = $createHeadingNode('h2');
-            parentElement.getChildren().forEach((child: any) => {
+            parentElement.getChildren().forEach((child: LexicalNode) => {
               headingNode.append(child);
             });
             parentElement.replace(headingNode);
@@ -244,7 +246,7 @@ export function EditorToolbar() {
           }
         } else {
           const headingNode = $createHeadingNode('h2');
-          parentElement?.getChildren().forEach((child: any) => {
+          parentElement?.getChildren().forEach((child: LexicalNode) => {
             headingNode.append(child);
           });
           parentElement?.replace(headingNode);
@@ -264,14 +266,14 @@ export function EditorToolbar() {
 
         if (parentElement && parentElement.getType() === 'quote') {
           const paragraph = $createParagraphNode();
-          parentElement.getChildren().forEach((child: any) => {
+          parentElement.getChildren().forEach((child: LexicalNode) => {
             paragraph.append(child);
           });
           parentElement.replace(paragraph);
           paragraph.select(0, 0);
         } else {
           const quoteNode = $createQuoteNode();
-          parentElement?.getChildren().forEach((child: any) => {
+          parentElement?.getChildren().forEach((child: LexicalNode) => {
             quoteNode.append(child);
           });
           parentElement?.replace(quoteNode);
@@ -291,7 +293,7 @@ export function EditorToolbar() {
 
         if (parentElement && (parentElement.getType() === 'heading' || parentElement.getType() === 'quote')) {
           const paragraph = $createParagraphNode();
-          parentElement.getChildren().forEach((child: any) => {
+          parentElement.getChildren().forEach((child: LexicalNode) => {
             paragraph.append(child);
           });
           parentElement.replace(paragraph);
@@ -321,7 +323,7 @@ export function EditorToolbar() {
         const existingLink = findLinkNode(anchorNode);
 
         if (existingLink) {
-          (existingLink as any).setURL(url);
+          (existingLink as unknown as { setURL: (url: string) => void }).setURL(url);
         } else {
           const linkNode = $createLinkNode(url);
           const selectedText = selection.getTextContent();
@@ -345,7 +347,7 @@ export function EditorToolbar() {
         const existingLink = findLinkNode(anchorNode);
         if (existingLink) {
           const linkNode = existingLink;
-          const children = (linkNode as any).getChildren();
+          const children = (linkNode as unknown as { getChildren: () => LexicalNode[] }).getChildren();
           children.forEach((child: LexicalNode) => {
             linkNode.insertBefore(child);
           });

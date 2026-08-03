@@ -1,5 +1,4 @@
 import React from 'react';
-import { z } from 'zod';
 
 import { ColumnsContainer as BaseColumnsContainer } from '@usewaypoint/block-columns-container';
 
