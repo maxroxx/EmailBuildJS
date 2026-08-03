@@ -36,7 +36,7 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
   };
 
   const normalized = normalizeTextProps(data.props);
-  const initialContent = normalized?.lexical;
+  const initialContent = normalized?.lexical ?? null;
 
   return (
     <BaseSidebarPanel title="Text block">

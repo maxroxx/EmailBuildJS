@@ -38,6 +38,7 @@ export const ColumnsContainerPropsSchema = z.object({
         .optional()
         .nullable(),
       contentAlignment: z.enum(['top', 'middle', 'bottom']).optional().nullable(),
+      columnsGap: z.number().optional().nullable(),
     })
     .optional()
     .nullable(),

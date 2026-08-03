@@ -10,8 +10,24 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 
-import { LexicalEditorState, LexicalNode } from '.';
 import { EditorToolbar } from './EditorToolbar';
+
+// =============================================================================
+// Minimal type definitions (to avoid circular dependency with index.tsx)
+// =============================================================================
+
+export interface LexicalNode {
+  type: string;
+  format: number | string;
+  indent: number;
+  direction: 'ltr' | 'rtl' | null;
+  children: LexicalNode[];
+  version: number;
+}
+
+export interface LexicalEditorState {
+  root: LexicalNode;
+}
 
 // =============================================================================
 // Simple ErrorBoundary for Lexical plugins
