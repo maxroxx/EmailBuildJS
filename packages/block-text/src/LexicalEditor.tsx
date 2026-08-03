@@ -21,14 +21,13 @@ function LexicalErrorBoundary({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-
 // =============================================================================
 // Internal: Sync external content changes into the editor
 // =============================================================================
 
 function useLexicalEditorContent(
   initialContent: LexicalEditorState | null,
-  isInternalRef: React.MutableRefObject<boolean>,
+  isInternalRef: React.MutableRefObject<boolean>
 ) {
   const [editor] = useLexicalComposerContext();
 
@@ -37,7 +36,9 @@ function useLexicalEditorContent(
       isInternalRef.current = false;
       return;
     }
-    if (!initialContent) {return;}
+    if (!initialContent) {
+      return;
+    }
 
     const json = JSON.stringify(initialContent);
     const editorState = editor.parseEditorState(json);
@@ -51,12 +52,14 @@ function useLexicalEditorContent(
 
 function useLexicalOnChange(
   editor: ReturnType<typeof useLexicalComposerContext>[0],
-  onChange: (lexical: LexicalEditorState) => void,
+  onChange: (lexical: LexicalEditorState) => void
 ) {
   useEffect(() => {
     return editor.registerUpdateListener(() => {
       const serialized = editor.toJSON();
-      if (!serialized.editorState?.root) {return;}
+      if (!serialized.editorState?.root) {
+        return;
+      }
       const lexical: LexicalEditorState = {
         root: serialized.editorState.root as unknown as LexicalNode,
       };
@@ -99,7 +102,7 @@ export function LexicalEditor({
       // No editorState — let Lexical create the default empty state.
       // Content is set after mount via useLexicalEditorContent.
     }),
-    [editable],
+    [editable]
   );
 
   return (
@@ -143,7 +146,7 @@ function LexicalEditorInner({
         onChange(lexical);
       }
     },
-    [onChange, isInternalRef],
+    [onChange, isInternalRef]
   );
 
   useLexicalOnChange(editor, handleChange);

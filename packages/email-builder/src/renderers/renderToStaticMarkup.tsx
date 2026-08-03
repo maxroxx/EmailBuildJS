@@ -17,7 +17,9 @@ function findColumnSpans(innerContent: string): { start: number; end: number }[]
     while (depth > 0 && i < innerContent.length) {
       const nextOpen = innerContent.indexOf('<div', i);
       const nextClose = innerContent.indexOf('</div>', i);
-      if (nextClose === -1) {break;}
+      if (nextClose === -1) {
+        break;
+      }
       if (nextOpen !== -1 && nextOpen < nextClose) {
         depth++;
         i = nextOpen + 4;
@@ -68,7 +70,9 @@ function addGhostTables(html: string): string {
         }
       }
 
-      if (nextClose === -1) {break;}
+      if (nextClose === -1) {
+        break;
+      }
 
       if (nextOpen !== -1 && nextOpen < nextClose) {
         depth++;
@@ -111,7 +115,9 @@ function addGhostTables(html: string): string {
       rebuilt += innerContent.substring(contentCursor, span.start);
       rebuilt += innerContent.substring(span.start, span.end);
       contentCursor = span.end;
-      if (i < columnSpans.length - 1) {rebuilt += tdSeparator;}
+      if (i < columnSpans.length - 1) {
+        rebuilt += tdSeparator;
+      }
     }
     rebuilt += innerContent.substring(contentCursor);
 
@@ -141,25 +147,30 @@ function escapeCssClass(className: string): string {
 }
 
 function fixInlineColumnStyles(html: string): string {
-  return html.replace(/<div(\s+[^>]*?class="[^"]*mj-column-per-([\d.]+)[^"]*"[^>]*?)>/g, (fullMatch, _attrs, percentage) => {
-    const styleMatch = fullMatch.match(/style="([^"]*)"/);
-    if (!styleMatch) {return fullMatch;}
+  return html.replace(
+    /<div(\s+[^>]*?class="[^"]*mj-column-per-([\d.]+)[^"]*"[^>]*?)>/g,
+    (fullMatch, _attrs, percentage) => {
+      const styleMatch = fullMatch.match(/style="([^"]*)"/);
+      if (!styleMatch) {
+        return fullMatch;
+      }
 
-    const styleContent = styleMatch[1];
-    const fixedStyle = styleContent
-      .replace(/display:\s*[^;]*;?\s*/g, '')
-      .replace(/max-width:\s*[^;]*;?\s*/g, '')
-      .replace(/width:\s*[^;]*;?\s*/g, '');
+      const styleContent = styleMatch[1];
+      const fixedStyle = styleContent
+        .replace(/display:\s*[^;]*;?\s*/g, '')
+        .replace(/max-width:\s*[^;]*;?\s*/g, '')
+        .replace(/width:\s*[^;]*;?\s*/g, '');
 
-    const newStyle = `display:table-cell;width:${percentage}%;max-width:${percentage}%;${fixedStyle}`;
-    const cleanedStyle = newStyle
-      .replace(/\s{2,}/g, ' ')
-      .replace(/;\s*;/g, ';')
-      .replace(/^;\s*/, '')
-      .replace(/\s*;$/, '');
+      const newStyle = `display:table-cell;width:${percentage}%;max-width:${percentage}%;${fixedStyle}`;
+      const cleanedStyle = newStyle
+        .replace(/\s{2,}/g, ' ')
+        .replace(/;\s*;/g, ';')
+        .replace(/^;\s*/, '')
+        .replace(/\s*;$/, '');
 
-    return fullMatch.replace(/style="[^"]*"/, `style="${cleanedStyle}"`);
-  });
+      return fullMatch.replace(/style="[^"]*"/, `style="${cleanedStyle}"`);
+    }
+  );
 }
 
 function fixColumnWrapperStyle(html: string): string {
@@ -170,15 +181,19 @@ function fixColumnWrapperStyle(html: string): string {
 }
 
 function generateResponsiveStyles(classes: Set<string>): string {
-  if (classes.size === 0) {return '';}
-  const mobileRules = Array.from(classes).map((className) => {
-    const escapedClass = escapeCssClass(className);
-    return `  .${escapedClass} {
+  if (classes.size === 0) {
+    return '';
+  }
+  const mobileRules = Array.from(classes)
+    .map((className) => {
+      const escapedClass = escapeCssClass(className);
+      return `  .${escapedClass} {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
   }`;
-  }).filter(Boolean);
+    })
+    .filter(Boolean);
 
   return `<style type="text/css">
 @media only screen and (max-width:480px) {
@@ -189,7 +204,9 @@ ${mobileRules.join('\n')}
 
 function injectStyles(html: string): string {
   const classes = getColumnClasses(html);
-  if (classes.size === 0) {return html;}
+  if (classes.size === 0) {
+    return html;
+  }
 
   const fixedHtml = fixColumnWrapperStyle(fixInlineColumnStyles(html));
   const responsiveStyles = generateResponsiveStyles(classes);

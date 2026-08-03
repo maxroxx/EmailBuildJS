@@ -3,7 +3,14 @@ import React from 'react';
 import { describe, expect, it } from '@jest/globals';
 import { render } from '@testing-library/react';
 
-import { createEmptyLexicalState, LexicalEditorState, LexicalTextNode,lexicalToHTML, normalizeTextProps, Text } from '.';
+import {
+  createEmptyLexicalState,
+  LexicalEditorState,
+  LexicalTextNode,
+  lexicalToHTML,
+  normalizeTextProps,
+  Text,
+} from '.';
 
 // =============================================================================
 // Legacy behavior tests (backward compatibility)
@@ -567,9 +574,7 @@ Powered by [Waypoint](https://usewaypoint.com)`,
 
     it('lexicals takes priority over legacy text', () => {
       const lexical = createLexicalState('Lexical');
-      const { container } = render(
-        <Text props={{ lexical, text: 'Legacy' }} />
-      );
+      const { container } = render(<Text props={{ lexical, text: 'Legacy' }} />);
       expect(container.querySelector('p')?.textContent).toBe('Lexical');
     });
 
@@ -579,9 +584,7 @@ Powered by [Waypoint](https://usewaypoint.com)`,
     });
 
     it('falls back to legacy markdown when no lexical', () => {
-      const { container } = render(
-        <Text props={{ text: '**Bold**', markdown: true }} />
-      );
+      const { container } = render(<Text props={{ text: '**Bold**', markdown: true }} />);
       expect(container.querySelector('strong')).toBeTruthy();
     });
   });

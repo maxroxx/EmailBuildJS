@@ -39,7 +39,10 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         label="Number of columns"
         defaultValue={data.props?.columnsCount === 2 ? '2' : '3'}
         onChange={(v) => {
-          updateData({ ...data, props: { ...data.props, columnsCount: v === '2' ? 2 : 3, fixedWidths: [null, null, null] } });
+          updateData({
+            ...data,
+            props: { ...data.props, columnsCount: v === '2' ? 2 : 3, fixedWidths: [null, null, null] },
+          });
         }}
       >
         <ToggleButton value="2">2</ToggleButton>

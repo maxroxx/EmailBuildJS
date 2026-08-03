@@ -21,7 +21,12 @@ export type EditorChildrenIdsProps = {
   showTrailingButton?: boolean;
   showLeadingButton?: boolean;
 };
-export default function EditorChildrenIds({ childrenIds, onChange, showTrailingButton = true, showLeadingButton = true }: EditorChildrenIdsProps) {
+export default function EditorChildrenIds({
+  childrenIds,
+  onChange,
+  showTrailingButton = true,
+  showLeadingButton = true,
+}: EditorChildrenIdsProps) {
   const appendBlock = (block: TEditorBlock) => {
     const blockId = generateId();
     return onChange({
@@ -50,7 +55,9 @@ export default function EditorChildrenIds({ childrenIds, onChange, showTrailingB
     <>
       {childrenIds.map((childId, i) => (
         <Fragment key={childId}>
-          {!(showLeadingButton === false && i === 0) ? <AddBlockButton onSelect={(block) => insertBlock(block, i)} /> : null}
+          {!(showLeadingButton === false && i === 0) ? (
+            <AddBlockButton onSelect={(block) => insertBlock(block, i)} />
+          ) : null}
           <EditorBlock id={childId} />
         </Fragment>
       ))}

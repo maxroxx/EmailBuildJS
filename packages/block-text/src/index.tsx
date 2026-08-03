@@ -114,26 +114,38 @@ export function normalizeTextProps(
 // =============================================================================
 
 function escapeHTML(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function parseLexicalFormat(formatValue: number | string | undefined): string {
   const styles: string[] = [];
   if (typeof formatValue === 'number') {
-    if (formatValue & FORMAT_BOLD) {styles.push('font-weight:bold');}
-    if (formatValue & FORMAT_ITALIC) {styles.push('font-style:italic');}
-    if (formatValue & FORMAT_UNDERLINE) {styles.push('text-decoration:underline');}
-    if (formatValue & FORMAT_STRIKETHROUGH) {styles.push('text-decoration:line-through');}
+    if (formatValue & FORMAT_BOLD) {
+      styles.push('font-weight:bold');
+    }
+    if (formatValue & FORMAT_ITALIC) {
+      styles.push('font-style:italic');
+    }
+    if (formatValue & FORMAT_UNDERLINE) {
+      styles.push('text-decoration:underline');
+    }
+    if (formatValue & FORMAT_STRIKETHROUGH) {
+      styles.push('text-decoration:line-through');
+    }
   } else if (typeof formatValue === 'string') {
     const formats = formatValue.split(' ');
-    if (formats.includes('bold') || formats.includes('Bold')) {styles.push('font-weight:bold');}
-    if (formats.includes('italic') || formats.includes('Italic')) {styles.push('font-style:italic');}
-    if (formats.includes('underline') || formats.includes('Underline')) {styles.push('text-decoration:underline');}
-    if (formats.includes('strikethrough') || formats.includes('Strikethrough')) {styles.push('text-decoration:line-through');}
+    if (formats.includes('bold') || formats.includes('Bold')) {
+      styles.push('font-weight:bold');
+    }
+    if (formats.includes('italic') || formats.includes('Italic')) {
+      styles.push('font-style:italic');
+    }
+    if (formats.includes('underline') || formats.includes('Underline')) {
+      styles.push('text-decoration:underline');
+    }
+    if (formats.includes('strikethrough') || formats.includes('Strikethrough')) {
+      styles.push('text-decoration:line-through');
+    }
   }
   return styles.join(';');
 }
@@ -144,9 +156,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
   }
 
   const nodeStyles = parseLexicalFormat(node.format);
-  const combinedStyles = parentStyles
-    ? `${parentStyles};${nodeStyles}`
-    : nodeStyles;
+  const combinedStyles = parentStyles ? `${parentStyles};${nodeStyles}` : nodeStyles;
 
   const children = node.children || [];
 
@@ -197,7 +207,9 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
 }
 
 export function lexicalToHTML(lexical: LexicalEditorState): string {
-  if (!lexical || !lexical.root) {return '';}
+  if (!lexical || !lexical.root) {
+    return '';
+  }
   return renderLexicalNode(lexical.root as LexicalNode);
 }
 

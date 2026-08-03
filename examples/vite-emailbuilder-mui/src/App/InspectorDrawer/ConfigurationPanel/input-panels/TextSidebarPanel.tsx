@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ZodError } from 'zod';
 
-import { LexicalEditorState, normalizeTextProps,TextProps, TextPropsSchema } from '@usewaypoint/block-text';
+import { LexicalEditorState, normalizeTextProps, TextProps, TextPropsSchema } from '@usewaypoint/block-text';
 import { LexicalEditor } from '@usewaypoint/block-text/LexicalEditor';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';

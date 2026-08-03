@@ -1,5 +1,17 @@
-import { $createParagraphNode, $createTextNode, $getSelection, $isRangeSelection, ElementNode, FORMAT_TEXT_COMMAND, IS_BOLD, IS_ITALIC, IS_STRIKETHROUGH, IS_UNDERLINE, LexicalNode } from 'lexical';
-import React, { useRef,useState } from 'react';
+import {
+  $createParagraphNode,
+  $createTextNode,
+  $getSelection,
+  $isRangeSelection,
+  ElementNode,
+  FORMAT_TEXT_COMMAND,
+  IS_BOLD,
+  IS_ITALIC,
+  IS_STRIKETHROUGH,
+  IS_UNDERLINE,
+  LexicalNode,
+} from 'lexical';
+import React, { useRef, useState } from 'react';
 
 import { $createLinkNode } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -88,7 +100,18 @@ export function EditorToolbar() {
         const isRange = $isRangeSelection(selection);
 
         if (!isRange) {
-          setFormats({ bold: false, italic: false, underline: false, strikethrough: false, heading: false, heading2: false, quote: false, paragraph: false, link: false, linkUrl: '' });
+          setFormats({
+            bold: false,
+            italic: false,
+            underline: false,
+            strikethrough: false,
+            heading: false,
+            heading2: false,
+            quote: false,
+            paragraph: false,
+            link: false,
+            linkUrl: '',
+          });
           return;
         }
 
@@ -387,58 +410,23 @@ export function EditorToolbar() {
       >
         {/* Line 1: Bold, Italic, Underline, Strikethrough, H1, H2, Quote */}
         <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
-          <ToolbarButton
-            active={formats.bold}
-            onClick={toggleBold}
-            tooltip="Bold (Ctrl+B)"
-            label="B"
-          />
-          <ToolbarButton
-            active={formats.italic}
-            onClick={toggleItalic}
-            tooltip="Italic (Ctrl+I)"
-            label="I"
-          />
-          <ToolbarButton
-            active={formats.underline}
-            onClick={toggleUnderline}
-            tooltip="Underline (Ctrl+U)"
-            label="U"
-          />
+          <ToolbarButton active={formats.bold} onClick={toggleBold} tooltip="Bold (Ctrl+B)" label="B" />
+          <ToolbarButton active={formats.italic} onClick={toggleItalic} tooltip="Italic (Ctrl+I)" label="I" />
+          <ToolbarButton active={formats.underline} onClick={toggleUnderline} tooltip="Underline (Ctrl+U)" label="U" />
           <ToolbarButton
             active={formats.strikethrough}
             onClick={toggleStrikethrough}
             tooltip="Strikethrough"
             label="S"
           />
-          <ToolbarButton
-            active={formats.heading}
-            onClick={toggleHeading}
-            tooltip="Heading 1"
-            label="H1"
-          />
-          <ToolbarButton
-            active={formats.heading2}
-            onClick={toggleHeading2}
-            tooltip="Heading 2"
-            label="H2"
-          />
-          <ToolbarButton
-            active={formats.quote}
-            onClick={toggleQuote}
-            tooltip="Quote"
-            label="Q"
-          />
+          <ToolbarButton active={formats.heading} onClick={toggleHeading} tooltip="Heading 1" label="H1" />
+          <ToolbarButton active={formats.heading2} onClick={toggleHeading2} tooltip="Heading 2" label="H2" />
+          <ToolbarButton active={formats.quote} onClick={toggleQuote} tooltip="Quote" label="Q" />
         </Box>
 
         {/* Line 2: Paragraph (toggle), Link */}
         <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
-          <ToolbarButton
-            active={formats.paragraph}
-            onClick={toggleParagraph}
-            tooltip="Paragraph"
-            label="P"
-          />
+          <ToolbarButton active={formats.paragraph} onClick={toggleParagraph} tooltip="Paragraph" label="P" />
           <Tooltip title="Insert Link" placement="top">
             <span>
               <IconButton
@@ -496,7 +484,12 @@ export function EditorToolbar() {
           />
           <Box sx={{ display: 'flex', gap: 1 }}>
             {hasExistingLink && (
-              <Button size="small" variant="outlined" onClick={removeLink} sx={{ color: '#d32f2f', borderColor: '#d32f2f' }}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={removeLink}
+                sx={{ color: '#d32f2f', borderColor: '#d32f2f' }}
+              >
                 Remove
               </Button>
             )}

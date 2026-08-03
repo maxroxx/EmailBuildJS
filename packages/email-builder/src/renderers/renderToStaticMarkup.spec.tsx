@@ -47,11 +47,7 @@ describe('renderToStaticMarkup', () => {
               },
               props: {
                 columnsCount: 2,
-                columns: [
-                  { childrenIds: ['block_col1'] },
-                  { childrenIds: ['block_col2'] },
-                  { childrenIds: [] },
-                ],
+                columns: [{ childrenIds: ['block_col1'] }, { childrenIds: ['block_col2'] }, { childrenIds: [] }],
               },
             },
           },
@@ -107,11 +103,7 @@ describe('renderToStaticMarkup', () => {
               },
               props: {
                 columnsCount: 2,
-                columns: [
-                  { childrenIds: ['block_col1'] },
-                  { childrenIds: ['block_col2'] },
-                  { childrenIds: [] },
-                ],
+                columns: [{ childrenIds: ['block_col1'] }, { childrenIds: ['block_col2'] }, { childrenIds: [] }],
               },
             },
           },
@@ -171,11 +163,7 @@ describe('renderToStaticMarkup', () => {
               },
               props: {
                 columnsCount: 2,
-                columns: [
-                  { childrenIds: ['block_col1'] },
-                  { childrenIds: ['block_col2'] },
-                  { childrenIds: [] },
-                ],
+                columns: [{ childrenIds: ['block_col1'] }, { childrenIds: ['block_col2'] }, { childrenIds: [] }],
               },
             },
           },
@@ -234,11 +222,7 @@ describe('renderToStaticMarkup', () => {
               },
               props: {
                 columnsCount: 2,
-                columns: [
-                  { childrenIds: ['block_col1'] },
-                  { childrenIds: ['block_col2'] },
-                  { childrenIds: [] },
-                ],
+                columns: [{ childrenIds: ['block_col1'] }, { childrenIds: ['block_col2'] }, { childrenIds: [] }],
               },
             },
           },

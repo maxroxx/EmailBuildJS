@@ -37,8 +37,7 @@ export const ColumnsContainerPropsSchema = z.object({
         .union([z.literal(2), z.literal(3)])
         .optional()
         .nullable(),
-      contentAlignment: z.enum(['top', 'middle', 'bottom']).optional()
-        .nullable(),
+      contentAlignment: z.enum(['top', 'middle', 'bottom']).optional().nullable(),
     })
     .optional()
     .nullable(),
@@ -157,7 +156,10 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
 
 const DEFAULT_CONTAINER_WIDTH = 600;
 
-function getEqualMaxWidth(index: number, { columnsCount, fixedWidths, innerWidth }: ColumnWrapperProps['props']): number | undefined {
+function getEqualMaxWidth(
+  index: number,
+  { columnsCount, fixedWidths, innerWidth }: ColumnWrapperProps['props']
+): number | undefined {
   if (fixedWidths && index < columnsCount) {
     const width = fixedWidths[index];
     if (typeof width === 'number') {
@@ -168,7 +170,9 @@ function getEqualMaxWidth(index: number, { columnsCount, fixedWidths, innerWidth
 }
 
 function getColumnClass(columnsCount: number, maxWidth: number | undefined, innerWidth: number): string {
-  if (!maxWidth) {return '';}
+  if (!maxWidth) {
+    return '';
+  }
   const percentage = (maxWidth / innerWidth) * 100;
   const roundedPercentage = Math.round(percentage * 1e12) / 1e12;
   return `mj-column-per-${roundedPercentage}`;
