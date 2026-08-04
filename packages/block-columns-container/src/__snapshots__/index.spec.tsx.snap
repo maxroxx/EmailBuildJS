@@ -3,65 +3,61 @@
 exports[`block-columns-container columnsCount 2 renders column children 1`] = `
 <DocumentFragment>
   <div>
-    <table
-      align="center"
-      border="0"
-      cellpadding="0"
-      style="table-layout: fixed; border-collapse: collapse;"
-      width="100%"
+    <div
+      class="mj-column-wrapper"
+      style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
     >
-      <tbody
-        style="width: 100%;"
+      <div
+        class="mj-column-per-50"
+        data-col-count="2"
+        data-col-width="300"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
-        <tr
-          style="width: 100%;"
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
         >
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          >
-            bread
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          >
-            tomato
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`block-columns-container columnsCount 2 uses padding correctly 1`] = `
-<DocumentFragment>
-  <div>
-    <table
-      align="center"
-      border="0"
-      cellpadding="0"
-      style="table-layout: fixed; border-collapse: collapse;"
-      width="100%"
-    >
-      <tbody
-        style="width: 100%;"
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bread
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-50"
+        data-col-count="2"
+        data-col-width="300"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
-        <tr
-          style="width: 100%;"
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
         >
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 6px;"
-          >
-            bread
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 6px; padding-right: 0px;"
-          >
-            tomato
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                tomato
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -69,75 +65,86 @@ exports[`block-columns-container columnsCount 2 uses padding correctly 1`] = `
 exports[`block-columns-container columnsCount 3 renders column children 1`] = `
 <DocumentFragment>
   <div>
-    <table
-      align="center"
-      border="0"
-      cellpadding="0"
-      style="table-layout: fixed; border-collapse: collapse;"
-      width="100%"
+    <div
+      class="mj-column-wrapper"
+      style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
     >
-      <tbody
-        style="width: 100%;"
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
-        <tr
-          style="width: 100%;"
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
         >
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          >
-            bread
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          >
-            tomato
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          >
-            lettuce
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`block-columns-container columnsCount 3 uses padding correctly 1`] = `
-<DocumentFragment>
-  <div>
-    <table
-      align="center"
-      border="0"
-      cellpadding="0"
-      style="table-layout: fixed; border-collapse: collapse;"
-      width="100%"
-    >
-      <tbody
-        style="width: 100%;"
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bread
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
-        <tr
-          style="width: 100%;"
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
         >
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 8px;"
-          >
-            bread
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 4px; padding-right: 4px;"
-          >
-            tomato
-          </td>
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 8px; padding-right: 0px;"
-          >
-            lettuce
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                tomato
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                lettuce
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
@@ -145,28 +152,57 @@ exports[`block-columns-container columnsCount 3 uses padding correctly 1`] = `
 exports[`block-columns-container renders with default values 1`] = `
 <DocumentFragment>
   <div>
-    <table
-      align="center"
-      border="0"
-      cellpadding="0"
-      style="table-layout: fixed; border-collapse: collapse;"
-      width="100%"
+    <div
+      class="mj-column-wrapper"
+      style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
     >
-      <tbody
-        style="width: 100%;"
+      <div
+        class="mj-column-per-50"
+        data-col-count="2"
+        data-col-width="300"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
-        <tr
-          style="width: 100%;"
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
         >
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          />
-          <td
-            style="box-sizing: content-box; vertical-align: middle; padding-left: 0px; padding-right: 0px;"
-          />
-        </tr>
-      </tbody>
-    </table>
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-50"
+        data-col-count="2"
+        data-col-width="300"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;

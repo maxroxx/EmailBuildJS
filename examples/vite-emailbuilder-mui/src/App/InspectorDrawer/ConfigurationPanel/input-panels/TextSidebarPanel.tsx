@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { ZodError } from 'zod';
 
-import { TextProps, TextPropsSchema } from '@usewaypoint/block-text';
+import { LexicalEditorState, normalizeTextProps, TextProps, TextPropsSchema } from '@usewaypoint/block-text';
+import { LexicalEditor } from '@usewaypoint/block-text/LexicalEditor';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
-import BooleanInput from './helpers/inputs/BooleanInput';
-import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
 type TextSidebarPanelProps = {
@@ -25,18 +24,31 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
     }
   };
 
+  const handleLexicalChange = (lexical: LexicalEditorState) => {
+    const newData = {
+      ...data,
+      props: {
+        ...data.props,
+        lexical,
+      },
+    };
+    updateData(newData);
+  };
+
+  const normalized = normalizeTextProps(data.props);
+  const initialContent = normalized?.lexical ?? null;
+
   return (
     <BaseSidebarPanel title="Text block">
-      <TextInput
-        label="Content"
-        rows={5}
-        defaultValue={data.props?.text ?? ''}
-        onChange={(text) => updateData({ ...data, props: { ...data.props, text } })}
-      />
-      <BooleanInput
-        label="Markdown (GitHub flavored)"
-        defaultValue={data.props?.markdown ?? false}
-        onChange={(markdown) => updateData({ ...data, props: { ...data.props, markdown } })}
+      <LexicalEditor
+        initialContent={initialContent}
+        onChange={handleLexicalChange}
+        placeholder="Type something..."
+        showToolbar
+        style={{
+          minHeight: 60,
+          fontSize: 14,
+        }}
       />
 
       <MultiStylePropertyPanel

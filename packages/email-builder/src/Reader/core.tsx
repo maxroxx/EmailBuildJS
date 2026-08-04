@@ -24,8 +24,16 @@ import EmailLayoutReader from '../blocks/EmailLayout/EmailLayoutReader';
 
 const ReaderContext = createContext<TReaderDocument>({});
 
+const PreviewContext = createContext<{ screenSize: 'desktop' | 'mobile' }>({
+  screenSize: 'desktop',
+});
+
 function useReaderDocument() {
   return useContext(ReaderContext);
+}
+
+export function usePreviewContext() {
+  return useContext(PreviewContext);
 }
 
 const READER_DICTIONARY = buildBlockConfigurationDictionary({
@@ -93,11 +101,14 @@ export function ReaderBlock({ id }: TReaderBlockProps) {
 export type TReaderProps = {
   document: Record<string, z.infer<typeof ReaderBlockSchema>>;
   rootBlockId: string;
+  screenSize?: 'desktop' | 'mobile';
 };
-export default function Reader({ document, rootBlockId }: TReaderProps) {
+export default function Reader({ document, rootBlockId, screenSize = 'desktop' }: TReaderProps) {
   return (
-    <ReaderContext.Provider value={document}>
-      <ReaderBlock id={rootBlockId} />
-    </ReaderContext.Provider>
+    <PreviewContext.Provider value={{ screenSize }}>
+      <ReaderContext.Provider value={document}>
+        <ReaderBlock id={rootBlockId} />
+      </ReaderContext.Provider>
+    </PreviewContext.Provider>
   );
 }

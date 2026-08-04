@@ -9,9 +9,10 @@ import TuneMenu from './TuneMenu';
 
 type TEditorBlockWrapperProps = {
   children: JSX.Element;
+  hideMenu?: boolean;
 };
 
-export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProps) {
+export default function EditorBlockWrapper({ children, hideMenu }: TEditorBlockWrapperProps) {
   const selectedBlockId = useSelectedBlockId();
   const [mouseInside, setMouseInside] = useState(false);
   const blockId = useCurrentBlockId();
@@ -24,7 +25,7 @@ export default function EditorBlockWrapper({ children }: TEditorBlockWrapperProp
   }
 
   const renderMenu = () => {
-    if (selectedBlockId !== blockId) {
+    if (selectedBlockId !== blockId || hideMenu) {
       return null;
     }
     return <TuneMenu blockId={blockId} />;
