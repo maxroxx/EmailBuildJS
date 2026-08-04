@@ -36,6 +36,8 @@ function findColumnSpans(innerContent: string): { start: number; end: number }[]
   return spans;
 }
 
+const EMAIL_WIDTH = 600;
+
 function addGhostTables(html: string): string {
   const marker = 'class="mj-column-wrapper"';
   const parts: string[] = [];
@@ -103,7 +105,7 @@ function addGhostTables(html: string): string {
       continue;
     }
 
-    const tdWidth = Math.round(600 / columnCount);
+    const tdWidth = Math.round(EMAIL_WIDTH / columnCount);
     const ghostOpen = `<!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" align="center"><tr><td valign="top" width="${tdWidth}"><![endif]-->`;
     const tdSeparator = `<!--[if mso | IE]></td><td valign="top" width="${tdWidth}"><![endif]-->`;
     const ghostClose = `<!--[if mso | IE]></td></tr></table><![endif]-->`;
@@ -132,14 +134,24 @@ function addGhostTables(html: string): string {
   return parts.join('');
 }
 
-function getColumnClasses(html: string): Set<string> {
-  const classes = new Set<string>();
-  const classRegex = /mj-column-per-([\d.]+)/g;
+type TColumnSpec = {
+  className: string;
+  widthPx: number;
+};
+
+function getColumnSpecs(html: string): TColumnSpec[] {
+  const specs: TColumnSpec[] = [];
+  const tagRegex = /<div\s+class="([^"]*mj-column-per-[\d.]+[^"]*)"[^>]*>/g;
   let match;
-  while ((match = classRegex.exec(html)) !== null) {
-    classes.add(`mj-column-per-${match[1]}`);
+  while ((match = tagRegex.exec(html)) !== null) {
+    const tag = match[0];
+    const widthMatch = tag.match(/data-col-width="([\d.]+)"|(?:min-width|max-width|width):\s*([\d.]+)px/);
+    if (!widthMatch) {
+      continue;
+    }
+    specs.push({ className: match[1], widthPx: parseFloat(widthMatch[1] ?? widthMatch[2]) });
   }
-  return classes;
+  return specs;
 }
 
 function escapeCssClass(className: string): string {
@@ -147,44 +159,74 @@ function escapeCssClass(className: string): string {
 }
 
 function fixInlineColumnStyles(html: string): string {
-  return html.replace(
-    /<div(\s+[^>]*?class="[^"]*mj-column-per-([\d.]+)[^"]*"[^>]*?)>/g,
-    (fullMatch, _attrs, percentage) => {
-      const styleMatch = fullMatch.match(/style="([^"]*)"/);
-      if (!styleMatch) {
-        return fullMatch;
-      }
-
-      const styleContent = styleMatch[1];
-      const fixedStyle = styleContent
-        .replace(/display:\s*[^;]*;?\s*/g, '')
-        .replace(/max-width:\s*[^;]*;?\s*/g, '')
-        .replace(/width:\s*[^;]*;?\s*/g, '');
-
-      const newStyle = `display:table-cell;width:${percentage}%;max-width:${percentage}%;${fixedStyle}`;
-      const cleanedStyle = newStyle
-        .replace(/\s{2,}/g, ' ')
-        .replace(/;\s*;/g, ';')
-        .replace(/^;\s*/, '')
-        .replace(/\s*;$/, '');
-
-      return fullMatch.replace(/style="[^"]*"/, `style="${cleanedStyle}"`);
+  return html.replace(/<div(\s+[^>]*?class="[^"]*mj-column-per-[\d.]+[^"]*"[^>]*?)>/g, (fullMatch) => {
+    const styleMatch = fullMatch.match(/style="([^"]*)"/);
+    if (!styleMatch) {
+      return fullMatch;
     }
-  );
+
+    const styleContent = styleMatch[1];
+    const fixedStyle = styleContent
+      .replace(/display:\s*[^;]*;?\s*/g, '')
+      .replace(/max-width:\s*[^;]*;?\s*/g, '')
+      .replace(/min-width:\s*[^;]*;?\s*/g, '')
+      .replace(/width:\s*[^;]*;?\s*/g, '');
+
+    const widthMatch =
+      fullMatch.match(/data-col-width="([\d.]+)"/) ?? styleContent.match(/(?:min-width|max-width|width):\s*([\d.]+)px/);
+    if (!widthMatch) {
+      return fullMatch;
+    }
+    const widthPx = parseFloat(widthMatch[1]);
+    const percentage = Math.round((widthPx / EMAIL_WIDTH) * 100 * 1e12) / 1e12;
+    // Fallback px keeps n * fallbackPx within the real content width so
+    // clients without calc() support (e.g. Gmail Inbox, which drops both
+    // <style> and calc()) never wrap: 600 - 48px default block padding -
+    // client slop (Gmail desktop shown ~548px content). calc() clients
+    // ignore these via the later % min-width.
+    const fallbackPx = Math.max(1, Math.floor(((EMAIL_WIDTH - 60) * percentage) / 100));
+    // Desktop min-width targets (share - 1px) for 3 columns and (share - 1.5px)
+    // for 2 columns, expressed against the wrapper's content width (email
+    // width minus its 2px margins). This keeps the visible total under the
+    // email width (599px) so equal columns NEVER sum to exactly 600 -
+    // avoiding the sub-pixel exact-fit wrap in calc() clients (browser,
+    // Apple Mail, Gmail Compose) - while leaving only a ~1px-per-column
+    // gap. The leftover 2px margins put a 1px breathing gap at each side of
+    // the block for a balanced look when columns have background colours.
+    const columnCount = parseFloat(fullMatch.match(/data-col-count="([\d.]+)"/)?.[1] ?? '0') || 0;
+    const desktopCoreWidth = EMAIL_WIDTH - 2;
+    const desktopTarget = widthPx - (columnCount === 2 ? 1.5 : 1);
+    const desktopPercentage = Math.round((desktopTarget / desktopCoreWidth) * 100 * 1e12) / 1e12;
+
+    // Fab Four (no media query needed): below 480px the calc() grows past
+    // max-width:100% (full-width stacked), above 480px it drops below the
+    // min-width (desktop percentages). Pixel declarations first act as the
+    // fallback for clients that do not support calc().
+    const newStyle = `display:inline-block;min-width:${fallbackPx}px;width:${fallbackPx}px;max-width:100%;min-width:${desktopPercentage}%;width:calc(230400px - 48000%);${fixedStyle}`;
+    const cleanedStyle = newStyle
+      .replace(/\s{2,}/g, ' ')
+      .replace(/;\s*;/g, ';')
+      .replace(/^;\s*/, '')
+      .replace(/\s*;$/, '');
+
+    return fullMatch.replace(/style="[^"]*"/, `style="${cleanedStyle}"`);
+  });
 }
 
 function fixColumnWrapperStyle(html: string): string {
   return html.replace(
-    /<div class="mj-column-wrapper" style="font-size:0;text-align:left">/g,
-    '<div class="mj-column-wrapper" style="display:table;width:100%;table-layout:fixed;text-align:left">'
+    /<div class="mj-column-wrapper" style="[^"]*">/g,
+    '<div class="mj-column-wrapper" style="display:block;width:100%;font-size:0;text-align:left;padding:0 1px;box-sizing:border-box">'
   );
 }
 
-function generateResponsiveStyles(classes: Set<string>): string {
-  if (classes.size === 0) {
+function generateResponsiveStyles(specs: TColumnSpec[]): string {
+  if (specs.length === 0) {
     return '';
   }
-  const mobileRules = Array.from(classes)
+
+  const classes = Array.from(new Set(specs.map((spec) => spec.className)));
+  const mobileRules = classes
     .map((className) => {
       const escapedClass = escapeCssClass(className);
       return `  .${escapedClass} {
@@ -193,23 +235,23 @@ function generateResponsiveStyles(classes: Set<string>): string {
     max-width: 100% !important;
   }`;
     })
-    .filter(Boolean);
+    .join('\n');
 
   return `<style type="text/css">
 @media only screen and (max-width:480px) {
-${mobileRules.join('\n')}
+${mobileRules}
 }
 </style>`;
 }
 
 function injectStyles(html: string): string {
-  const classes = getColumnClasses(html);
-  if (classes.size === 0) {
+  const specs = getColumnSpecs(html);
+  if (specs.length === 0) {
     return html;
   }
 
   const fixedHtml = fixColumnWrapperStyle(fixInlineColumnStyles(html));
-  const responsiveStyles = generateResponsiveStyles(classes);
+  const responsiveStyles = generateResponsiveStyles(specs);
   if (fixedHtml.includes('</head>')) {
     return fixedHtml.replace('</head>', `${responsiveStyles}</head>`);
   }

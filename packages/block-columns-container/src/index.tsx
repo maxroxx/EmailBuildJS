@@ -77,6 +77,9 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
           fontSize: '0',
           textAlign: 'left',
           display: mobile ? 'block' : undefined,
+          paddingLeft: 1,
+          paddingRight: 1,
+          boxSizing: 'border-box',
         }}
       >
         {[0, 1, 2].map((index) => (
@@ -107,26 +110,51 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
 
   const contentAlignment = props?.contentAlignment ?? ColumnsContainerPropsDefaults.contentAlignment;
   const maxWidth = props?.fixedWidths?.[index] ?? getEqualMaxWidth(index, props);
-  const colWidth = mobile ? '100%' : maxWidth;
+  const widthValue = maxWidth ?? props.innerWidth / columnsCount;
 
   const children = columns?.[index];
   const renderedChildren = Array.isArray(children) ? <>{children}</> : children;
 
   const columnClass = getColumnClass(columnsCount, maxWidth, props.innerWidth);
 
-  return (
-    <div
-      className={columnClass}
-      style={{
-        display: mobile ? 'block' : 'inline-block',
-        verticalAlign: mobile ? 'top' : contentAlignment,
-        width: colWidth,
-        maxWidth: colWidth,
+  // Fab Four (no media query needed): below 480px the calc() grows past
+  // max-width:100% (full-width stacked), above 480px it drops below the
+  // min-width (desktop percentages). Matches renderToStaticMarkup output so
+  // editor/Reader previews behave exactly like the sent email. The exact px
+  // width is carried in data-col-width for the renderer to reconstruct.
+  // Desktop min-width targets (share - 1px) for 3 columns and (share - 1.5px)
+  // for 2 columns, expressed against the wrapper's content width (email width
+  // minus its 2px margins). This keeps the visible total under the email
+  // width (599px) so equal columns NEVER sum to exactly 600 - avoiding the
+  // sub-pixel exact-fit wrap - while leaving only a ~1px-per-column gap.
+  // The leftover 2px margins put a 1px breathing gap at each side of the
+  // block for a balanced look when columns have background colours.
+  const desktopCoreWidth = props.innerWidth - 2;
+  const desktopTarget = widthValue - (columnsCount === 2 ? 1.5 : 1);
+  const desktopPercentage = Math.round((desktopTarget / desktopCoreWidth) * 100 * 1e12) / 1e12;
+  const columnStyle: CSSProperties = mobile
+    ? {
+        display: 'block',
+        width: '100%',
+        maxWidth: '100%',
+        verticalAlign: 'top',
         minHeight: 40,
         margin: 0,
         boxSizing: 'border-box',
-      }}
-    >
+      }
+    : {
+        display: 'inline-block',
+        verticalAlign: contentAlignment,
+        width: 'calc(230400px - 48000%)',
+        maxWidth: '100%',
+        minWidth: `${desktopPercentage}%`,
+        minHeight: 40,
+        margin: 0,
+        boxSizing: 'border-box',
+      };
+
+  return (
+    <div className={columnClass} style={columnStyle} data-col-width={widthValue} data-col-count={columnsCount}>
       <table
         width="100%"
         cellPadding="0"
@@ -175,6 +203,6 @@ function getColumnClass(columnsCount: number, maxWidth: number | undefined, inne
     return '';
   }
   const percentage = (maxWidth / innerWidth) * 100;
-  const roundedPercentage = Math.round(percentage * 1e12) / 1e12;
+  const roundedPercentage = Math.round(percentage);
   return `mj-column-per-${roundedPercentage}`;
 }

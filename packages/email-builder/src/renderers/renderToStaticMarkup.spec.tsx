@@ -81,7 +81,7 @@ describe('renderToStaticMarkup', () => {
       expect(result).toMatchSnapshot();
     });
 
-    it('includes mj-column-wrapper with inline-block column divs', () => {
+    it('includes mj-column-wrapper with fab-four inline styles on column divs', () => {
       const result = renderToStaticMarkup(
         {
           root: {
@@ -135,10 +135,13 @@ describe('renderToStaticMarkup', () => {
         { rootBlockId: 'root' }
       );
       expect(result).toContain('class="mj-column-wrapper"');
-      expect(result).toContain('style="display:table;width:100%;table-layout:fixed;text-align:left"');
+      expect(result).toContain(
+        'style="display:block;width:100%;font-size:0;text-align:left;padding:0 1px;box-sizing:border-box"'
+      );
       expect(result).toContain('mj-column-per-50');
-      expect(result).toContain('display:table-cell');
-      expect(result).toContain('width:50%;max-width:50%');
+      expect(result).toContain(
+        'display:inline-block;min-width:270px;width:270px;max-width:100%;min-width:49.916387959866%;width:calc(230400px - 48000%)'
+      );
     });
 
     it('includes ghost tables with mso conditional comments', () => {
@@ -407,7 +410,8 @@ describe('renderToStaticMarkup', () => {
       // 3 columns = 2 separators between them
       const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
       expect(separatorCount).toBe(2);
-      expect(result).toContain('width:33.333333333333%;max-width:33.333333333333%');
+      expect(result).toContain('min-width:33.277591973244%;width:calc(230400px - 48000%)');
+      expect(result).toContain('min-width:179px;width:179px;max-width:100%');
     });
   });
 
