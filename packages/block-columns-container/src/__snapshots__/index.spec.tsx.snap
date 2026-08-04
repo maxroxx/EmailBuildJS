@@ -2,9 +2,7 @@
 
 exports[`block-columns-container columnsCount 2 renders column children 1`] = `
 <DocumentFragment>
-  <div
-    style="padding-top: 16px; padding-bottom: 16px;"
-  >
+  <div>
     <div
       class="mj-column-wrapper"
       style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
@@ -66,9 +64,7 @@ exports[`block-columns-container columnsCount 2 renders column children 1`] = `
 
 exports[`block-columns-container columnsCount 3 renders column children 1`] = `
 <DocumentFragment>
-  <div
-    style="padding-top: 16px; padding-bottom: 16px;"
-  >
+  <div>
     <div
       class="mj-column-wrapper"
       style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
@@ -155,9 +151,7 @@ exports[`block-columns-container columnsCount 3 renders column children 1`] = `
 
 exports[`block-columns-container renders with default values 1`] = `
 <DocumentFragment>
-  <div
-    style="padding-top: 16px; padding-bottom: 16px;"
-  >
+  <div>
     <div
       class="mj-column-wrapper"
       style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
