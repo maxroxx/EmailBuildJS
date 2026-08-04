@@ -58,8 +58,6 @@ const ColumnsContainerPropsDefaults = {
 export function ColumnsContainer({ style, columns, props, mobile }: ColumnsContainerProps) {
   const wStyle: CSSProperties = {
     backgroundColor: style?.backgroundColor ?? undefined,
-    paddingTop: 16,
-    paddingBottom: 16,
   };
 
   const blockProps = {

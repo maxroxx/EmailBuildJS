@@ -51,7 +51,7 @@ const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
   ColumnsContainer: {
     schema: ColumnsContainerPropsSchema,
     Component: (props) => (
-      <EditorBlockWrapper hideMenu>
+      <EditorBlockWrapper>
         <ColumnsContainerEditor {...props} />
       </EditorBlockWrapper>
     ),
