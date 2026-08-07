@@ -168,7 +168,9 @@ function LexicalEditorInner({
   useLexicalOnChange(editor, handleChange);
 
   const contentEditableStyle: React.CSSProperties = {
-    minHeight: 120,
+    minHeight: 160,
+    maxHeight: 240,
+    overflowY: 'auto',
     padding: '8px 12px',
     outline: 'none',
     fontSize: 14,
@@ -183,7 +185,26 @@ function LexicalEditorInner({
     <div style={{ position: 'relative' }}>
       <RichTextPlugin
         contentEditable={<ContentEditable style={contentEditableStyle} />}
-        placeholder={<div style={{ color: '#999', padding: '8px 12px' }}>{placeholder}</div>}
+        placeholder={
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              padding: '8px 12px',
+              color: '#999',
+              pointerEvents: 'none',
+              userSelect: 'none',
+              fontSize: 14,
+              lineHeight: 1.5,
+              boxSizing: 'border-box',
+            }}
+          >
+            {placeholder}
+          </div>
+        }
         ErrorBoundary={LexicalErrorBoundary}
       />
 

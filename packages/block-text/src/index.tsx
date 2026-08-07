@@ -84,6 +84,23 @@ function textToLexicalJSON(text: string): LexicalEditorState {
   };
 }
 
+function isEmptyLexicalState(lexical: LexicalEditorState): boolean {
+  if (!lexical?.root) {
+    return true;
+  }
+  if (Array.isArray(lexical.root.children)) {
+    if (lexical.root.children.length === 0) {
+      return true;
+    }
+    for (const child of lexical.root.children) {
+      if (child.type === 'paragraph' && Array.isArray(child.children) && child.children.length === 0) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export function normalizeTextProps(
   props: { text?: string | null; markdown?: boolean | null; lexical?: unknown } | null | undefined
 ): { text?: string | null; markdown?: boolean | null; lexical?: LexicalEditorState | null } {
@@ -91,12 +108,20 @@ export function normalizeTextProps(
     return { text: '', lexical: textToLexicalJSON('') };
   }
 
-  // If already has lexical data, return as-is
+  // If already has lexical data, validate it
   if (props.lexical) {
+    const lexical = props.lexical as LexicalEditorState;
+    if (isEmptyLexicalState(lexical)) {
+      return {
+        text: props.text ?? '',
+        markdown: props.markdown,
+        lexical: textToLexicalJSON(''),
+      };
+    }
     return {
       text: props.text,
       markdown: props.markdown,
-      lexical: props.lexical as LexicalEditorState,
+      lexical,
     };
   }
 
