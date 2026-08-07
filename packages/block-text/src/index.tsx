@@ -85,9 +85,13 @@ function textToLexicalJSON(text: string): LexicalEditorState {
 }
 
 function isEmptyLexicalState(lexical: LexicalEditorState): boolean {
-  if (!lexical?.root) {return true;}
+  if (!lexical?.root) {
+    return true;
+  }
   if (Array.isArray(lexical.root.children)) {
-    if (lexical.root.children.length === 0) {return true;}
+    if (lexical.root.children.length === 0) {
+      return true;
+    }
     for (const child of lexical.root.children) {
       if (child.type === 'paragraph' && Array.isArray(child.children) && child.children.length === 0) {
         return true;
