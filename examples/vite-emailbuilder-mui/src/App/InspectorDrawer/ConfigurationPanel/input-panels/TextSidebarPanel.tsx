@@ -287,7 +287,19 @@ function InlineColorControl({
             style={{ width: '100%', height: 80 }}
           />
         </Box>
-        <Box sx={{ width: '100%', fontSize: 12, py: 0.5, px: 1, border: '1px solid', borderColor: 'grey.300', borderRadius: 0.5, mb: 1, '&:focus-within': { outline: 'none', borderColor: 'primary.main' } }}>
+        <Box
+          sx={{
+            width: '100%',
+            fontSize: 12,
+            py: 0.5,
+            px: 1,
+            border: '1px solid',
+            borderColor: 'grey.300',
+            borderRadius: 0.5,
+            mb: 1,
+            '&:focus-within': { outline: 'none', borderColor: 'primary.main' },
+          }}
+        >
           <HexColorInput
             color={value || '#000000'}
             onChange={(c) => {
