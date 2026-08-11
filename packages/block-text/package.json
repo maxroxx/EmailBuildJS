@@ -26,7 +26,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup ./src/index.tsx ./src/LexicalEditor.tsx ./src/EditorToolbar.tsx --outDir dist --format cjs,esm --dts --external lexical --external @lexical/react --external @lexical/link --external @lexical/rich-text --external @lexical/html"
+    "build": "tsup ./src/index.tsx ./src/LexicalEditor.tsx ./src/EditorToolbar.tsx --outDir dist --format cjs,esm --dts --external lexical --external @lexical/react --external @lexical/link --external @lexical/rich-text --external @lexical/html --external @lexical/selection --external @lexical/utils"
   },
   "author": "carlos@usewaypoint.com",
   "license": "MIT",
@@ -44,6 +44,8 @@
     "@lexical/link": "^0.18.0",
     "@lexical/react": "^0.18.0",
     "@lexical/rich-text": "^0.18.0",
+    "@lexical/selection": "^0.18.0",
+    "@lexical/utils": "^0.18.0",
     "insane": "^2.6.2",
     "lexical": "^0.18.0",
     "marked": "^12.0.2"
