@@ -34,6 +34,8 @@ export interface LexicalTextNode extends LexicalNode {
   style: string;
   text: string;
   version: number;
+  color?: string;
+  backgroundColor?: string;
 }
 
 export interface LexicalLinkNode extends LexicalNode {
@@ -142,7 +144,7 @@ function escapeHTML(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function parseLexicalFormat(formatValue: number | string | undefined): string {
+function parseLexicalFormat(formatValue: number | string | undefined, node?: LexicalNode): string {
   const styles: string[] = [];
   if (typeof formatValue === 'number') {
     if (formatValue & FORMAT_BOLD) {
@@ -172,6 +174,22 @@ function parseLexicalFormat(formatValue: number | string | undefined): string {
       styles.push('text-decoration:line-through');
     }
   }
+  if (node && typeof node === 'object') {
+    const n = node as LexicalTextNode;
+    const styleStr = n.style || '';
+    const colorMatch = styleStr.match(/(?:^|;)color:([^;]*)/);
+    if (colorMatch && colorMatch[1]) {
+      styles.push(`color:${colorMatch[1]}`);
+    }
+    const bgMatch = styleStr.match(/background-color:([^;]*)/);
+    if (bgMatch && bgMatch[1]) {
+      styles.push(`background-color:${bgMatch[1]}`);
+    }
+    const fsMatch = styleStr.match(/font-size:([^;]*)/);
+    if (fsMatch && fsMatch[1]) {
+      styles.push(`font-size:${fsMatch[1]}`);
+    }
+  }
   return styles.join(';');
 }
 
@@ -180,7 +198,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
     return '';
   }
 
-  const nodeStyles = parseLexicalFormat(node.format);
+  const nodeStyles = parseLexicalFormat(node.format, node);
   const combinedStyles = parentStyles ? `${parentStyles};${nodeStyles}` : nodeStyles;
 
   const children = node.children || [];
@@ -197,7 +215,7 @@ function renderLexicalNode(node: LexicalNode, parentStyles?: string): string {
 
     case 'paragraph': {
       const inner = children.map((child: LexicalNode) => renderLexicalNode(child, combinedStyles)).join('');
-      return `<p>${inner}</p>`;
+      return `<p style="margin:0">${inner}</p>`;
     }
 
     case 'heading': {

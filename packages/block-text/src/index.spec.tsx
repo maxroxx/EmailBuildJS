@@ -196,7 +196,7 @@ Powered by [Waypoint](https://usewaypoint.com)`,
         },
       };
       const html = lexicalToHTML(lexical);
-      expect(html).toBe('<p>Hello world</p>');
+      expect(html).toBe('<p style="margin:0">Hello world</p>');
     });
 
     it('renders bold text', () => {
@@ -524,7 +524,7 @@ Powered by [Waypoint](https://usewaypoint.com)`,
         },
       };
       const html = lexicalToHTML(lexical);
-      expect(html).toBe('<p></p>');
+      expect(html).toBe('<p style="margin:0"></p>');
     });
   });
 
