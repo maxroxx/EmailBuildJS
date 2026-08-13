@@ -439,4 +439,387 @@ describe('renderToStaticMarkup', () => {
       expect(result).not.toContain('mj-column-wrapper');
     });
   });
+
+  describe('2-row layout', () => {
+    it('renders RowsContainer with correct structure', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 2,
+                rows: [{ childrenIds: ['block_row1'] }, { childrenIds: ['block_row2'] }, { childrenIds: [] }],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toMatchSnapshot();
+    });
+
+    it('includes mj-row-wrapper with block styles on row divs', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 2,
+                rows: [{ childrenIds: ['block_row1'] }, { childrenIds: ['block_row2'] }, { childrenIds: [] }],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toContain('class="mj-row-wrapper"');
+      expect(result).toContain('style="display:block;width:100%;box-sizing:border-box"');
+      expect(result).toContain('mj-row-per-100');
+      expect(result).toContain('display:block;width:100%;max-width:100%');
+    });
+
+    it('includes ghost tables for rows', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 2,
+                rows: [{ childrenIds: ['block_row1'] }, { childrenIds: ['block_row2'] }, { childrenIds: [] }],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toContain('<!--[if mso | IE]><table role="presentation"');
+      expect(result).toContain('<![endif]-->');
+      expect(result).toContain('</td><td valign="top"');
+      expect(result).toContain('</td></tr></table><![endif]-->');
+    });
+
+    it('does NOT include media queries for rows', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 2,
+                rows: [{ childrenIds: ['block_row1'] }, { childrenIds: ['block_row2'] }, { childrenIds: [] }],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).not.toContain('@media only screen');
+      expect(result).not.toContain('display: block !important');
+    });
+  });
+
+  describe('3-row layout', () => {
+    it('renders RowsContainer with 3 rows', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 3,
+                rows: [
+                  { childrenIds: ['block_row1'] },
+                  { childrenIds: ['block_row2'] },
+                  { childrenIds: ['block_row3'] },
+                ],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toMatchSnapshot();
+    });
+
+    it('includes ghost tables with 3 td separators for 3 rows', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_rows'],
+            },
+          },
+          block_rows: {
+            type: 'RowsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                rowsCount: 3,
+                rows: [
+                  { childrenIds: ['block_row1'] },
+                  { childrenIds: ['block_row2'] },
+                  { childrenIds: ['block_row3'] },
+                ],
+              },
+            },
+          },
+          block_row1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_row3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toContain('<!--[if mso | IE]><table role="presentation"');
+      expect(result).toContain('</td><td valign="top"');
+      // 3 rows = 2 separators between them
+      const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
+      expect(separatorCount).toBe(2);
+    });
+  });
 });

@@ -8,31 +8,31 @@ import {
 } from '@mui/icons-material';
 import { ToggleButton } from '@mui/material';
 
-import ColumnsContainerPropsSchema, {
-  ColumnsContainerProps,
-} from '../../../../documents/blocks/ColumnsContainer/ColumnsContainerPropsSchema';
+import RowsContainerPropsSchema, {
+  RowsContainerProps,
+} from '../../../../documents/blocks/RowsContainer/RowsContainerPropsSchema';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
-import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
+import RowWidthsInput from './helpers/inputs/RowWidthsInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
-type ColumnsContainerPanelProps = {
-  data: ColumnsContainerProps;
-  setData: (v: ColumnsContainerProps) => void;
+type RowsContainerPanelProps = {
+  data: RowsContainerProps;
+  setData: (v: RowsContainerProps) => void;
 };
-export default function ColumnsContainerPanel({ data, setData }: ColumnsContainerPanelProps) {
+export default function RowsContainerPanel({ data, setData }: RowsContainerPanelProps) {
   const [, setErrors] = useState<ZodError | null>(null);
 
-  const columnsCount = data.props?.columnsCount ?? 2;
+  const rowsCount = data.props?.rowsCount ?? 3;
 
-  const updateData = (partial: Partial<ColumnsContainerProps>) => {
-    const newData: ColumnsContainerProps = {
+  const updateData = (partial: Partial<RowsContainerProps>) => {
+    const newData: RowsContainerProps = {
       ...data,
       ...partial,
       props: { ...data.props, ...partial.props },
     };
-    const res = ColumnsContainerPropsSchema.safeParse(newData);
+    const res = RowsContainerPropsSchema.safeParse(newData);
     if (res.success) {
       setData(res.data);
       setErrors(null);
@@ -42,20 +42,29 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
   };
 
   return (
-    <BaseSidebarPanel title="Columns block">
+    <BaseSidebarPanel title="Rows block">
       <RadioGroupInput
-        label="Number of columns"
-        value={String(columnsCount)}
+        label="Number of rows"
+        value={String(rowsCount)}
         onChange={(v) => {
-          const count = v === '2' ? 2 : 3;
-          updateData({ props: { columnsCount: count, fixedWidths: [null, null, null] } });
+          const count = parseInt(v, 10);
+          const existingWidths = data.props?.fixedWidths ?? [];
+          const newWidths = Array(count).fill(null);
+          for (let i = 0; i < Math.min(existingWidths.length, count); i++) {
+            newWidths[i] = existingWidths[i];
+          }
+          updateData({ props: { rowsCount: count, fixedWidths: newWidths } });
         }}
       >
         <ToggleButton value="2">2</ToggleButton>
         <ToggleButton value="3">3</ToggleButton>
+        <ToggleButton value="4">4</ToggleButton>
+        <ToggleButton value="5">5</ToggleButton>
+        <ToggleButton value="6">6</ToggleButton>
       </RadioGroupInput>
-      <ColumnWidthsInput
-        defaultValue={data.props?.fixedWidths}
+      <RowWidthsInput
+        value={data.props?.fixedWidths}
+        rowsCount={rowsCount}
         onChange={(fixedWidths) => {
           updateData({ props: { fixedWidths } });
         }}

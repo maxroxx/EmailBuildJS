@@ -6,6 +6,7 @@ import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 import { TEditorBlock, TEditorConfiguration } from '../../../editor/core';
 import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
+import { RowsContainerProps } from '../../RowsContainer/RowsContainerPropsSchema';
 import cloneDocumentBlock from '../cloneDocumentBlock';
 
 const sx: SxProps = {
@@ -37,6 +38,11 @@ function findParentBlockId(blockId: string, document: TEditorConfiguration) {
         break;
       case 'ColumnsContainer':
         if (block.data.props?.columns?.some((col) => col.childrenIds?.includes(blockId))) {
+          return id;
+        }
+        break;
+      case 'RowsContainer':
+        if (block.data.props?.rows?.some((row) => row.childrenIds?.includes(blockId))) {
           return id;
         }
         break;
@@ -87,6 +93,18 @@ export default function TuneMenu({ blockId }: Props) {
             if (column.childrenIds.includes(blockId)) {
               const index = column.childrenIds.indexOf(blockId);
               column.childrenIds.splice(index + 1, 0, newBlockId);
+            }
+          }
+          break;
+        case 'RowsContainer':
+          if (!parentBlock.data.props) {
+            parentBlock.data.props = { rows: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] };
+          }
+
+          for (const row of parentBlock.data.props.rows) {
+            if (row.childrenIds.includes(blockId)) {
+              const index = row.childrenIds.indexOf(blockId);
+              row.childrenIds.splice(index + 1, 0, newBlockId);
             }
           }
           break;
@@ -145,6 +163,20 @@ export default function TuneMenu({ blockId }: Props) {
                 })),
               },
             } as ColumnsContainerProps,
+          };
+          break;
+        case 'RowsContainer':
+          nDocument[id] = {
+            type: 'RowsContainer',
+            data: {
+              style: block.data.style,
+              props: {
+                ...block.data.props,
+                rows: block.data.props?.rows?.map((r) => ({
+                  childrenIds: filterChildrenIds(r.childrenIds),
+                })),
+              },
+            } as RowsContainerProps,
           };
           break;
         default:
@@ -215,6 +247,20 @@ export default function TuneMenu({ blockId }: Props) {
                 })),
               },
             } as ColumnsContainerProps,
+          };
+          break;
+        case 'RowsContainer':
+          nDocument[id] = {
+            type: 'RowsContainer',
+            data: {
+              style: block.data.style,
+              props: {
+                ...block.data.props,
+                rows: block.data.props?.rows?.map((r) => ({
+                  childrenIds: moveChildrenIds(r.childrenIds),
+                })),
+              },
+            } as RowsContainerProps,
           };
           break;
         default:

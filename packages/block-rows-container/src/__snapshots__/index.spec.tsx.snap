@@ -1,0 +1,892 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`block-rows-container contentAlignment renders with bottom alignment 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: bottom; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                top
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: bottom; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bottom
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container contentAlignment renders with top alignment 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: top; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                top
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: top; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                middle
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container fixedWidths applies custom widths 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-67"
+        data-row-count="3"
+        data-row-width="400"
+        style="display: block; width: 400px; max-width: 400px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                wide
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-33"
+        data-row-count="3"
+        data-row-width="200"
+        style="display: block; width: 200px; max-width: 200px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                narrow
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-50"
+        data-row-count="3"
+        data-row-width="300"
+        style="display: block; width: 300px; max-width: 300px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                medium
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container mobile mode renders rows in mobile mode 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bread
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                tomato
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container renders with default values 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container rowsCount 2 renders row children 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bread
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="2"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                tomato
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container rowsCount 3 renders row children 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="3"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                bread
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="3"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                tomato
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="3"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                lettuce
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container rowsCount 4 renders 4 row children 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="4"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row1
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="4"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row2
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="4"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row3
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="4"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row4
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="5"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row1
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="5"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row2
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="5"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row3
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="5"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row4
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="5"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row5
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-row-wrapper"
+      style="display: block; width: 100%; box-sizing: border-box;"
+    >
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row1
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row2
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row3
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row4
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row5
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-row-per-100"
+        data-row-count="6"
+        data-row-width="600"
+        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                row6
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

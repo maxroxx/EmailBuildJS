@@ -11,6 +11,7 @@
     "packages/block-button",
     "packages/block-columns-container",
     "packages/block-container",
+    "packages/block-rows-container",
     "packages/block-divider",
     "packages/block-heading",
     "packages/block-html",
@@ -22,7 +23,7 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@usewaypoint/block-avatar --workspace=@usewaypoint/block-button --workspace=@usewaypoint/block-columns-container --workspace=@usewaypoint/block-container --workspace=@usewaypoint/block-divider --workspace=@usewaypoint/block-heading --workspace=@usewaypoint/block-html --workspace=@usewaypoint/block-image --workspace=@usewaypoint/block-spacer --workspace=@usewaypoint/block-text --workspace=@usewaypoint/document-core --workspace=@usewaypoint/email-builder",
+    "build": "npm run build --workspace=@usewaypoint/block-avatar --workspace=@usewaypoint/block-button --workspace=@usewaypoint/block-columns-container --workspace=@usewaypoint/block-container --workspace=@usewaypoint/block-divider --workspace=@usewaypoint/block-heading --workspace=@usewaypoint/block-html --workspace=@usewaypoint/block-image --workspace=@usewaypoint/block-rows-container --workspace=@usewaypoint/block-spacer --workspace=@usewaypoint/block-text --workspace=@usewaypoint/document-core --workspace=@usewaypoint/email-builder",
     "test": "npx jest"
   },
   "author": "carlos@usewaypoint.com",

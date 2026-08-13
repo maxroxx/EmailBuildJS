@@ -49,7 +49,7 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
       />
       <RadioGroupInput
         label="Width"
-        defaultValue={fullWidth ? 'FULL_WIDTH' : 'AUTO'}
+        value={fullWidth ? 'FULL_WIDTH' : 'AUTO'}
         onChange={(v) => updateData({ ...data, props: { ...data.props, fullWidth: v === 'FULL_WIDTH' } })}
       >
         <ToggleButton value="FULL_WIDTH">Full</ToggleButton>
@@ -57,7 +57,7 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
       </RadioGroupInput>
       <RadioGroupInput
         label="Size"
-        defaultValue={size}
+        value={size}
         onChange={(size) => updateData({ ...data, props: { ...data.props, size } })}
       >
         <ToggleButton value="x-small">Xs</ToggleButton>
@@ -67,7 +67,7 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
       </RadioGroupInput>
       <RadioGroupInput
         label="Style"
-        defaultValue={buttonStyle}
+        value={buttonStyle}
         onChange={(buttonStyle) => updateData({ ...data, props: { ...data.props, buttonStyle } })}
       >
         <ToggleButton value="rectangle">Rectangle</ToggleButton>

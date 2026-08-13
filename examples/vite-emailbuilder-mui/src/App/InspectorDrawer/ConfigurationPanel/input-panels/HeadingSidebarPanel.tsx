@@ -38,7 +38,7 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
       />
       <RadioGroupInput
         label="Level"
-        defaultValue={data.props?.level ?? HeadingPropsDefaults.level}
+        value={data.props?.level ?? HeadingPropsDefaults.level}
         onChange={(level) => {
           updateData({ ...data, props: { ...data.props, level } });
         }}

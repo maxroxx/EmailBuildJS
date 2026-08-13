@@ -59,19 +59,19 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
       <Stack direction="row" spacing={2}>
         <TextDimensionInput
           label="Width"
-          defaultValue={data.props?.width}
+          value={data.props?.width}
           onChange={(width) => updateData({ ...data, props: { ...data.props, width } })}
         />
         <TextDimensionInput
           label="Height"
-          defaultValue={data.props?.height}
+          value={data.props?.height}
           onChange={(height) => updateData({ ...data, props: { ...data.props, height } })}
         />
       </Stack>
 
       <RadioGroupInput
         label="Alignment"
-        defaultValue={data.props?.contentAlignment ?? 'middle'}
+        value={data.props?.contentAlignment ?? 'middle'}
         onChange={(contentAlignment) => updateData({ ...data, props: { ...data.props, contentAlignment } })}
       >
         <ToggleButton value="top">

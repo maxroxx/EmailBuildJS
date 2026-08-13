@@ -1,0 +1,26 @@
+{
+  "name": "@usewaypoint/block-rows-container",
+  "version": "0.0.1",
+  "description": "@usewaypoint/document compatible RowsContainer component",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup ./src/index.tsx --outDir dist --format cjs,esm --dts"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^16 || ^17 || ^18",
+    "zod": "^1 || ^2 || ^3"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.2.1"
+  }
+}

@@ -48,7 +48,7 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
       />
       <RadioGroupInput
         label="Shape"
-        defaultValue={shape}
+        value={shape}
         onChange={(shape) => {
           updateData({ ...data, props: { ...data.props, shape } });
         }}
