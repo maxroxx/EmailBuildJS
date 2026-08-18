@@ -415,6 +415,96 @@ describe('renderToStaticMarkup', () => {
     });
   });
 
+  describe('columns with gap', () => {
+    it('keeps every column width equal and applies the gap as external margins', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_cols'],
+            },
+          },
+          block_cols: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                columnsCount: 3,
+                columnsGap: 16,
+                marginBeforeFirst: 12,
+                marginBeforeLast: 20,
+                columns: [
+                  { childrenIds: ['block_col1'] },
+                  { childrenIds: ['block_col2'] },
+                  { childrenIds: ['block_col3'] },
+                ],
+              },
+            },
+          },
+          block_col1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+
+      const colTags = result.match(/<div class="mj-column-per-33" style="[^"]*"[^>]*>/g) ?? [];
+      expect(colTags).toHaveLength(3);
+
+      // Every column reports the same gap-aware width and min-width percentage
+      const minWidths = colTags.map((tag) => tag.match(/min-width:([\d.]+)%/)?.[1]);
+      expect(new Set(minWidths).size).toBe(1);
+
+      // Gap is applied as external margins on the column divs: first frames the
+      // outer-left gap, middle columns the between-gap, last the outer-right gap.
+      const zeroAwareMargins = [...result.matchAll(/margin-left:([\d.]+(?:px)?);margin-right:([\d.]+(?:px)?)/g)].map(
+        (m) => `${m[1]}/${m[2]}`
+      );
+      expect(zeroAwareMargins).toEqual(['12px/0', '16px/0', '16px/20px']);
+    });
+  });
+
   describe('no columns', () => {
     it('renders without ghost tables or media queries for empty container', () => {
       const result = renderToStaticMarkup(
@@ -437,6 +527,242 @@ describe('renderToStaticMarkup', () => {
       expect(result).not.toContain('<!--[if mso | IE]');
       expect(result).not.toContain('@media only screen');
       expect(result).not.toContain('mj-column-wrapper');
+    });
+  });
+
+  describe('nested columns', () => {
+    it('renders nested ColumnsContainer with correct ghost table structure', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_cols'],
+            },
+          },
+          block_cols: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                columnsCount: 3,
+                columns: [
+                  { childrenIds: ['block_col1'] },
+                  { childrenIds: ['block_col2'] },
+                  { childrenIds: ['block_col3'] },
+                ],
+              },
+            },
+          },
+          block_col1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col2: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: {
+                columnsCount: 3,
+                columns: [
+                  { childrenIds: ['block_inner_col1'] },
+                  { childrenIds: ['block_inner_col2'] },
+                  { childrenIds: ['block_inner_col3'] },
+                ],
+              },
+            },
+          },
+          block_inner_col1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_inner_col2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_inner_col3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toContain('class="mj-column-wrapper"');
+      expect(result).toContain('<!--[if mso | IE]><table role="presentation"');
+      expect(result).toContain('</td></tr></table><![endif]-->');
+      const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
+      expect(separatorCount).toBeGreaterThan(0);
+      const wrapperCount = (result.match(/class="mj-column-wrapper"/g) || []).length;
+      expect(wrapperCount).toBe(2);
+    });
+
+    it('includes responsive media queries for nested column classes', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_cols'],
+            },
+          },
+          block_cols: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                columnsCount: 3,
+                columns: [
+                  { childrenIds: ['block_col1'] },
+                  { childrenIds: ['block_col2'] },
+                  { childrenIds: ['block_col3'] },
+                ],
+              },
+            },
+          },
+          block_col1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col2: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: {
+                columnsCount: 3,
+                columns: [
+                  { childrenIds: ['block_inner_col1'] },
+                  { childrenIds: ['block_inner_col2'] },
+                  { childrenIds: ['block_inner_col3'] },
+                ],
+              },
+            },
+          },
+          block_inner_col1: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_inner_col2: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_inner_col3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+          block_col3: {
+            type: 'Container',
+            data: {
+              style: {
+                backgroundColor: null,
+                borderColor: null,
+                borderRadius: null,
+                padding: { top: 0, bottom: 0, left: 0, right: 0 },
+              },
+              props: { childrenIds: [] },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
+      );
+      expect(result).toContain('@media only screen and (max-width:480px)');
+      expect(result).toContain('display: block !important');
+      expect(result).toContain('width: 100% !important');
     });
   });
 

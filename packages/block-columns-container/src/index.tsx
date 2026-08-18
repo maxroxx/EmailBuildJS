@@ -39,6 +39,8 @@ export const ColumnsContainerPropsSchema = z.object({
         .nullable(),
       contentAlignment: z.enum(['top', 'middle', 'bottom']).optional().nullable(),
       columnsGap: z.number().optional().nullable(),
+      marginBeforeFirst: z.number().optional().nullable(),
+      marginBeforeLast: z.number().optional().nullable(),
     })
     .optional()
     .nullable(),
@@ -65,6 +67,9 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
     contentAlignment: props?.contentAlignment ?? ColumnsContainerPropsDefaults.contentAlignment,
     fixedWidths: props?.fixedWidths,
     innerWidth: DEFAULT_CONTAINER_WIDTH,
+    columnsGap: props?.columnsGap ?? 0,
+    marginBeforeFirst: props?.marginBeforeFirst ?? 0,
+    marginBeforeLast: props?.marginBeforeLast ?? 0,
   };
 
   return (
@@ -94,6 +99,9 @@ type ColumnWrapperProps = {
     columnsCount: 2 | 3;
     contentAlignment: 'top' | 'middle' | 'bottom';
     innerWidth: number;
+    columnsGap: number;
+    marginBeforeFirst: number;
+    marginBeforeLast: number;
   };
   index: number;
   columns?: TColumn[];
@@ -115,6 +123,19 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
 
   const columnClass = getColumnClass(columnsCount, maxWidth, props.innerWidth);
 
+  const columnsGap = props?.columnsGap ?? 0;
+  const marginBeforeFirst = props?.marginBeforeFirst ?? 0;
+  const marginBeforeLast = props?.marginBeforeLast ?? 0;
+
+  // The in-between gap must not come out of any single column's content:
+  // instead every column gives up an equal share of the total spacing, so all
+  // column boxes stay exactly the same width. The spacing itself is applied as
+  // external margins (outside the box), so the box AND its content keep equal
+  // dimensions across columns - unlike padding, which would carve the gap out
+  // of the content of whichever column happened to host it.
+  const totalGap = marginBeforeFirst + (columnsCount - 1) * columnsGap + marginBeforeLast;
+  const gapAwareWidth = widthValue - totalGap / columnsCount;
+
   // Fab Four (no media query needed): below 480px the calc() grows past
   // max-width:100% (full-width stacked), above 480px it drops below the
   // min-width (desktop percentages). Matches renderToStaticMarkup output so
@@ -128,8 +149,9 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
   // The leftover 2px margins put a 1px breathing gap at each side of the
   // block for a balanced look when columns have background colours.
   const desktopCoreWidth = props.innerWidth - 2;
-  const desktopTarget = widthValue - (columnsCount === 2 ? 1.5 : 1);
+  const desktopTarget = gapAwareWidth - (columnsCount === 2 ? 1.5 : 1);
   const desktopPercentage = Math.round((desktopTarget / desktopCoreWidth) * 100 * 1e12) / 1e12;
+
   const columnStyle: CSSProperties = mobile
     ? {
         display: 'block',
@@ -151,8 +173,22 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
         boxSizing: 'border-box',
       };
 
+  // Spacing is applied as external margins (with border-box) so the gap never
+  // comes out of any single column's content: every column has already given
+  // up an equal share of the total spacing via gapAwareWidth, and the margins
+  // simply place the freed space between (and around) the equal boxes.
+  // "Before first" frames the outer-left gap, "before last" frames the
+  // outer-right gap, and the gap between adjacent columns comes from the left
+  // margin of every column after the first.
+  // Margins are desktop-only: on mobile the columns stack full-width with no
+  // horizontal spacing, so the margins are left at 0.
+  if (!mobile) {
+    columnStyle.marginLeft = index === 0 ? marginBeforeFirst : columnsGap;
+    columnStyle.marginRight = index === columnsCount - 1 ? marginBeforeLast : 0;
+  }
+
   return (
-    <div className={columnClass} style={columnStyle} data-col-width={widthValue} data-col-count={columnsCount}>
+    <div className={columnClass} style={columnStyle} data-col-width={gapAwareWidth} data-col-count={columnsCount}>
       <table
         width="100%"
         cellPadding="0"

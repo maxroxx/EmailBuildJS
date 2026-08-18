@@ -4,6 +4,11 @@ import getConfiguration from '../../getConfiguration';
 
 import { TEditorConfiguration } from './core';
 
+// Flag used by undo/redo to prevent the subscribe callback from capturing snapshots
+// during undo/redo operations. Set to true before calling setDocument/resetDocument
+// during undo/redo, and the subscribe in useUndoRedo checks this flag.
+export const undoRedoSkipSnapshotRef = { current: false };
+
 type TValue = {
   document: TEditorConfiguration;
 
@@ -16,7 +21,7 @@ type TValue = {
   samplesDrawerOpen: boolean;
 };
 
-const editorStateStore = create<TValue>(() => ({
+export const editorStateStore = create<TValue>(() => ({
   document: getConfiguration(window.location.hash),
   selectedBlockId: null,
   selectedSidebarTab: 'styles',
@@ -106,4 +111,20 @@ export function toggleSamplesDrawerOpen() {
 
 export function setSelectedScreenSize(selectedScreenSize: TValue['selectedScreenSize']) {
   return editorStateStore.setState({ selectedScreenSize });
+}
+
+// Wrapped versions for undo/redo that set the skipSnapshot flag
+// so the subscribe callback doesn't capture restored states as new entries
+// Using resetDocument (full replacement) instead of setDocument (merge)
+// because setDocument merges and won't trigger state change if document is already the same
+export function setDocumentForUndo(document: TValue['document']) {
+  undoRedoSkipSnapshotRef.current = true;
+  resetDocument(document);
+  undoRedoSkipSnapshotRef.current = false;
+}
+
+export function resetDocumentForUndo(document: TValue['document']) {
+  undoRedoSkipSnapshotRef.current = true;
+  resetDocument(document);
+  undoRedoSkipSnapshotRef.current = false;
 }

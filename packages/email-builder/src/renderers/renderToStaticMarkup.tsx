@@ -11,7 +11,11 @@ function findBlockSpans(innerContent: string, displayType: 'inline-block' | 'blo
   const spans: { start: number; end: number }[] = [];
   const regex = new RegExp(`<div[^>]*display:${displayType}[^>]*>`, 'g');
   let match;
+  let lastEnd = 0;
   while ((match = regex.exec(innerContent)) !== null) {
+    if (match.index < lastEnd) {
+      continue;
+    }
     let depth = 1;
     let i = match.index + match[0].length;
     while (depth > 0 && i < innerContent.length) {
@@ -21,12 +25,22 @@ function findBlockSpans(innerContent: string, displayType: 'inline-block' | 'blo
         break;
       }
       if (nextOpen !== -1 && nextOpen < nextClose) {
+        const openTagEnd = innerContent.indexOf('>', nextOpen);
+        const openTag = innerContent.substring(nextOpen, openTagEnd + 1);
+        if (openTag.includes('mj-column-wrapper') || openTag.includes('mj-row-wrapper')) {
+          const wrapperClose = innerContent.indexOf('</div>', nextOpen);
+          if (wrapperClose !== -1) {
+            i = wrapperClose + 6;
+            continue;
+          }
+        }
         depth++;
         i = nextOpen + 4;
       } else {
         depth--;
         if (depth === 0) {
           spans.push({ start: match.index, end: nextClose + 6 });
+          lastEnd = nextClose + 6;
           break;
         }
         i = nextClose + 6;
@@ -39,6 +53,31 @@ function findBlockSpans(innerContent: string, displayType: 'inline-block' | 'blo
 const EMAIL_WIDTH = 600;
 
 type TWrapperType = 'column' | 'row';
+
+function findParentColumnWidth(result: string, rowWrapperPos: number): number | null {
+  let searchPos = rowWrapperPos - 1;
+  while (searchPos >= 0) {
+    const divStart = result.lastIndexOf('<div', searchPos);
+    if (divStart === -1) {
+      break;
+    }
+    const divEnd = result.indexOf('>', divStart);
+    const divTag = result.substring(divStart, divEnd + 1);
+    if (divTag.includes('mj-column-per-')) {
+      const colWidthMatch = divTag.match(/data-col-width="([\d.]+)"/);
+      if (colWidthMatch) {
+        return parseFloat(colWidthMatch[1]);
+      }
+      const colCountMatch = divTag.match(/data-col-count="([\d.]+)"/);
+      if (colCountMatch) {
+        const colCount = parseFloat(colCountMatch[1]);
+        return Math.round(EMAIL_WIDTH / colCount);
+      }
+    }
+    searchPos = divStart - 1;
+  }
+  return null;
+}
 
 function addGhostTables(html: string): string {
   const wrapperMarkers: { marker: string; type: TWrapperType }[] = [
@@ -115,7 +154,18 @@ function addGhostTables(html: string): string {
         continue;
       }
 
-      const tdWidth = Math.round(EMAIL_WIDTH / blockCount);
+      let tdWidth = Math.round(EMAIL_WIDTH / blockCount);
+      if (type === 'row') {
+        const rowWrapperFullTag = result.substring(openDivStart, openDivEnd + 1);
+        const isInsideColumn = rowWrapperFullTag.includes('mj-column-per-');
+        if (!isInsideColumn) {
+          const parentColWidth = findParentColumnWidth(result, openDivStart);
+          if (parentColWidth !== null && parentColWidth < EMAIL_WIDTH) {
+            tdWidth = Math.round(parentColWidth / blockCount);
+          }
+        }
+      }
+
       const ghostOpen = `<!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" align="center"><tr><td valign="top" width="${tdWidth}"><![endif]-->`;
       const tdSeparator = `<!--[if mso | IE]></td><td valign="top" width="${tdWidth}"><![endif]-->`;
       const ghostClose = `<!--[if mso | IE]></td></tr></table><![endif]-->`;
@@ -296,6 +346,8 @@ function generateResponsiveStyles(specs: TColumnSpec[]): string {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }`;
     })
     .join('\n');

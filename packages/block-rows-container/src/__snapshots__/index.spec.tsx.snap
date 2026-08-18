@@ -11,7 +11,7 @@ exports[`block-rows-container contentAlignment renders with bottom alignment 1`]
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -36,7 +36,7 @@ exports[`block-rows-container contentAlignment renders with bottom alignment 1`]
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -73,7 +73,7 @@ exports[`block-rows-container contentAlignment renders with top alignment 1`] = 
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -98,7 +98,7 @@ exports[`block-rows-container contentAlignment renders with top alignment 1`] = 
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -222,7 +222,7 @@ exports[`block-rows-container mobile mode renders rows in mobile mode 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -247,7 +247,7 @@ exports[`block-rows-container mobile mode renders rows in mobile mode 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -284,7 +284,7 @@ exports[`block-rows-container renders with default values 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -307,7 +307,7 @@ exports[`block-rows-container renders with default values 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -342,7 +342,7 @@ exports[`block-rows-container rowsCount 2 renders row children 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -367,7 +367,7 @@ exports[`block-rows-container rowsCount 2 renders row children 1`] = `
         class="mj-row-per-100"
         data-row-count="2"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -404,7 +404,7 @@ exports[`block-rows-container rowsCount 3 renders row children 1`] = `
         class="mj-row-per-100"
         data-row-count="3"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -429,7 +429,7 @@ exports[`block-rows-container rowsCount 3 renders row children 1`] = `
         class="mj-row-per-100"
         data-row-count="3"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -454,7 +454,7 @@ exports[`block-rows-container rowsCount 3 renders row children 1`] = `
         class="mj-row-per-100"
         data-row-count="3"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -491,7 +491,7 @@ exports[`block-rows-container rowsCount 4 renders 4 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="4"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -516,7 +516,7 @@ exports[`block-rows-container rowsCount 4 renders 4 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="4"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -541,7 +541,7 @@ exports[`block-rows-container rowsCount 4 renders 4 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="4"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -566,7 +566,7 @@ exports[`block-rows-container rowsCount 4 renders 4 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="4"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -603,7 +603,7 @@ exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="5"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -628,7 +628,7 @@ exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="5"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -653,7 +653,7 @@ exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="5"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -678,7 +678,7 @@ exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="5"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -703,7 +703,7 @@ exports[`block-rows-container rowsCount 5 renders 5 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="5"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -740,7 +740,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -765,7 +765,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -790,7 +790,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -815,7 +815,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -840,7 +840,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -865,7 +865,7 @@ exports[`block-rows-container rowsCount 6 renders 6 row children 1`] = `
         class="mj-row-per-100"
         data-row-count="6"
         data-row-width="600"
-        style="display: block; width: 600px; max-width: 600px; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: block; width: 100%; max-width: 100%; vertical-align: top; min-height: 40px; margin: 0px; box-sizing: border-box;"
       >
         <table
           border="0"

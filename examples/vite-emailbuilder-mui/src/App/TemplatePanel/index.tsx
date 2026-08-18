@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { MonitorOutlined, PhoneIphoneOutlined } from '@mui/icons-material';
-import { Box, Stack, SxProps, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
+import { MonitorOutlined, PhoneIphoneOutlined, RedoOutlined, UndoOutlined } from '@mui/icons-material';
+import { Box, IconButton, Stack, SxProps, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 import { Reader } from '@usewaypoint/email-builder';
 
 import EditorBlock from '../../documents/editor/EditorBlock';
@@ -11,6 +11,7 @@ import {
   useSelectedMainTab,
   useSelectedScreenSize,
 } from '../../documents/editor/EditorContext';
+import { useUndoRedo } from '../../hooks/useUndoRedo';
 import ToggleInspectorPanelButton from '../InspectorDrawer/ToggleInspectorPanelButton';
 import ToggleSamplesPanelButton from '../SamplesDrawer/ToggleSamplesPanelButton';
 
@@ -25,6 +26,7 @@ export default function TemplatePanel() {
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
+  const { canUndo, canRedo, undo, redo } = useUndoRedo();
 
   let mainBoxSx: SxProps = {
     height: '100%',
@@ -109,6 +111,20 @@ export default function TemplatePanel() {
                 </Tooltip>
               </ToggleButton>
             </ToggleButtonGroup>
+            <Tooltip title="Undo">
+              <span>
+                <IconButton onClick={undo} disabled={!canUndo} size="small">
+                  <UndoOutlined fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Redo">
+              <span>
+                <IconButton onClick={redo} disabled={!canRedo} size="small">
+                  <RedoOutlined fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
             <ShareButton />
           </Stack>
         </Stack>

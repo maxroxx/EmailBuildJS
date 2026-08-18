@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { ZodError } from 'zod';
 
 import {
+  AlignHorizontalLeftOutlined,
+  AlignHorizontalRightOutlined,
+  SwapHorizOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignCenterOutlined,
   VerticalAlignTopOutlined,
@@ -15,6 +18,7 @@ import ColumnsContainerPropsSchema, {
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
+import SliderInput from './helpers/inputs/SliderInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
 type ColumnsContainerPanelProps = {
@@ -59,6 +63,39 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         onChange={(fixedWidths) => {
           updateData({ props: { fixedWidths } });
         }}
+      />
+      <SliderInput
+        label="Margin before first"
+        iconLabel={<AlignHorizontalLeftOutlined sx={{ fontSize: 16 }} />}
+        defaultValue={data.props?.marginBeforeFirst ?? 0}
+        onChange={(marginBeforeFirst) => updateData({ props: { marginBeforeFirst } })}
+        units="px"
+        step={4}
+        min={0}
+        max={80}
+        marks
+      />
+      <SliderInput
+        label="Margin between columns"
+        iconLabel={<SwapHorizOutlined sx={{ fontSize: 16 }} />}
+        defaultValue={data.props?.columnsGap ?? 0}
+        onChange={(columnsGap) => updateData({ props: { columnsGap } })}
+        units="px"
+        step={4}
+        min={0}
+        max={80}
+        marks
+      />
+      <SliderInput
+        label="Margin before last"
+        iconLabel={<AlignHorizontalRightOutlined sx={{ fontSize: 16 }} />}
+        defaultValue={data.props?.marginBeforeLast ?? 0}
+        onChange={(marginBeforeLast) => updateData({ props: { marginBeforeLast } })}
+        units="px"
+        step={4}
+        min={0}
+        max={80}
+        marks
       />
       <RadioGroupInput
         label="Alignment"

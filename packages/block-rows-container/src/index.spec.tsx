@@ -10,6 +10,25 @@ describe('block-rows-container', () => {
     expect(render(<RowsContainer />).asFragment()).toMatchSnapshot();
   });
 
+  it('renders full-width rows with mj-row-per-100 class', () => {
+    const rows = [<>bread</>, <>tomato</>];
+    const { container } = render(<RowsContainer props={{ rowsCount: 2 }} rows={rows} />);
+    const rowEls = Array.from(container.querySelectorAll('[class*="mj-row-per-"]')) as HTMLElement[];
+    expect(rowEls).toHaveLength(2);
+    for (const row of rowEls) {
+      expect(row.className).toBe('mj-row-per-100');
+      expect(row.style.width).toBe('100%');
+      expect(row.style.maxWidth).toBe('100%');
+    }
+  });
+
+  it('renders custom widths with percentage classes', () => {
+    const rows = [<>wide</>, <>narrow</>, <>medium</>];
+    const { container } = render(<RowsContainer props={{ rowsCount: 3, fixedWidths: [400, 200, 300] }} rows={rows} />);
+    const rowEls = Array.from(container.querySelectorAll('[class*="mj-row-per-"]')) as HTMLElement[];
+    expect(rowEls.map((el) => el.className)).toEqual(['mj-row-per-67', 'mj-row-per-33', 'mj-row-per-50']);
+  });
+
   describe('rowsCount 2', () => {
     it('renders row children', () => {
       const rows = [<>bread</>, <>tomato</>, <>lettuce</>];

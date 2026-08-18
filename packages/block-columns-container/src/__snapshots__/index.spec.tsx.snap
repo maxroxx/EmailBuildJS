@@ -11,7 +11,7 @@ exports[`block-columns-container columnsCount 2 renders column children 1`] = `
         class="mj-column-per-50"
         data-col-count="2"
         data-col-width="300"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -36,7 +36,7 @@ exports[`block-columns-container columnsCount 2 renders column children 1`] = `
         class="mj-column-per-50"
         data-col-count="2"
         data-col-width="300"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -73,7 +73,7 @@ exports[`block-columns-container columnsCount 3 renders column children 1`] = `
         class="mj-column-per-33"
         data-col-count="3"
         data-col-width="200"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -98,7 +98,7 @@ exports[`block-columns-container columnsCount 3 renders column children 1`] = `
         class="mj-column-per-33"
         data-col-count="3"
         data-col-width="200"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -123,7 +123,7 @@ exports[`block-columns-container columnsCount 3 renders column children 1`] = `
         class="mj-column-per-33"
         data-col-count="3"
         data-col-width="200"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -160,7 +160,7 @@ exports[`block-columns-container renders with default values 1`] = `
         class="mj-column-per-50"
         data-col-count="2"
         data-col-width="300"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"
@@ -183,7 +183,7 @@ exports[`block-columns-container renders with default values 1`] = `
         class="mj-column-per-50"
         data-col-count="2"
         data-col-width="300"
-        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 49.916387959866%; min-height: 40px; margin: 0px 0px 0px 0px; box-sizing: border-box;"
       >
         <table
           border="0"

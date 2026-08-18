@@ -148,22 +148,21 @@ function RowWrapper({ index, props, rows }: RowWrapperProps) {
 
 const DEFAULT_CONTAINER_WIDTH = 600;
 
-function getEqualMaxWidth(
-  index: number,
-  { rowsCount, fixedWidths, innerWidth }: RowWrapperProps['props']
-): number | undefined {
+function getEqualMaxWidth(index: number, { rowsCount, fixedWidths }: RowWrapperProps['props']): number | undefined {
   if (fixedWidths && index < rowsCount) {
     const width = fixedWidths[index];
     if (typeof width === 'number') {
       return width;
     }
   }
-  return innerWidth;
+  return undefined;
 }
 
 function getRowClass(rowsCount: number, maxWidth: number | undefined, innerWidth: number): string {
-  if (!maxWidth) {
-    return '';
+  if (maxWidth === undefined) {
+    // A row without a fixed width spans the full width of its container
+    // (100%), which may be narrower than the email when nested inside a column.
+    return 'mj-row-per-100';
   }
   const percentage = (maxWidth / innerWidth) * 100;
   const roundedPercentage = Math.round(percentage);
