@@ -73,4 +73,40 @@ describe('block-columns-container', () => {
       expect(new Set(widths).size).toBe(1);
     });
   });
+
+  describe('fixedHeights', () => {
+    it('applies custom heights to columns', () => {
+      const columns = [<>bread</>, <>tomato</>, <>lettuce</>];
+      const { container } = render(
+        <ColumnsContainer props={{ columnsCount: 3, fixedHeights: [200, null, 100] }} columns={columns} />
+      );
+      const colEls = Array.from(container.querySelectorAll('[class*="mj-column-per-"]')) as HTMLElement[];
+      expect(colEls).toHaveLength(3);
+      expect(colEls[0].style.minHeight).toBe('200px');
+      expect(colEls[0].getAttribute('data-col-height')).toBe('200');
+      expect(colEls[1].style.minHeight).toBe('40px');
+      expect(colEls[1].getAttribute('data-col-height')).toBeNull();
+      expect(colEls[2].style.minHeight).toBe('100px');
+      expect(colEls[2].getAttribute('data-col-height')).toBe('100');
+    });
+
+    it('applies height to table cell td', () => {
+      const columns = [<>col1</>, <>col2</>];
+      const { container } = render(
+        <ColumnsContainer props={{ columnsCount: 2, fixedHeights: [200, null, null] }} columns={columns} />
+      );
+      const tds = Array.from(container.querySelectorAll('td')) as HTMLElement[];
+      expect(tds[0].style.height).toBe('200px');
+      expect(tds[1].style.height).toBe('');
+    });
+
+    it('renders snapshot with fixedHeights', () => {
+      const columns = [<>col1</>, <>col2</>, <>col3</>];
+      expect(
+        render(
+          <ColumnsContainer props={{ columnsCount: 3, fixedHeights: [150, 100, null] }} columns={columns} />
+        ).asFragment()
+      ).toMatchSnapshot();
+    });
+  });
 });

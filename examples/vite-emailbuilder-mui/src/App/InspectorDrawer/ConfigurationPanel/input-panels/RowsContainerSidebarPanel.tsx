@@ -6,7 +6,7 @@ import {
   VerticalAlignCenterOutlined,
   VerticalAlignTopOutlined,
 } from '@mui/icons-material';
-import { ToggleButton } from '@mui/material';
+import { Divider, ToggleButton, Typography } from '@mui/material';
 
 import RowsContainerPropsSchema, {
   RowsContainerProps,
@@ -14,6 +14,7 @@ import RowsContainerPropsSchema, {
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
+import RowHeightsInput from './helpers/inputs/RowHeightsInput';
 import RowWidthsInput from './helpers/inputs/RowWidthsInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
@@ -21,16 +22,22 @@ type RowsContainerPanelProps = {
   data: RowsContainerProps;
   setData: (v: RowsContainerProps) => void;
 };
+
+type PartialProps = Partial<NonNullable<RowsContainerProps['props']>>;
+
 export default function RowsContainerPanel({ data, setData }: RowsContainerPanelProps) {
   const [, setErrors] = useState<ZodError | null>(null);
 
   const rowsCount = data.props?.rowsCount ?? 3;
 
-  const updateData = (partial: Partial<RowsContainerProps>) => {
+  const updateData = (partial: { props?: PartialProps; style?: RowsContainerProps['style'] }) => {
     const newData: RowsContainerProps = {
       ...data,
       ...partial,
-      props: { ...data.props, ...partial.props },
+      props: {
+        ...(data.props ?? {}),
+        ...partial.props,
+      } as RowsContainerProps['props'],
     };
     const res = RowsContainerPropsSchema.safeParse(newData);
     if (res.success) {
@@ -49,11 +56,16 @@ export default function RowsContainerPanel({ data, setData }: RowsContainerPanel
         onChange={(v) => {
           const count = parseInt(v, 10);
           const existingWidths = data.props?.fixedWidths ?? [];
+          const existingHeights = data.props?.fixedHeights ?? [];
           const newWidths = Array(count).fill(null);
+          const newHeights = Array(count).fill(null);
           for (let i = 0; i < Math.min(existingWidths.length, count); i++) {
             newWidths[i] = existingWidths[i];
+            newHeights[i] = existingHeights[i];
           }
-          updateData({ props: { rowsCount: count, fixedWidths: newWidths } });
+          updateData({
+            props: { rowsCount: count as 2 | 3 | 4 | 5 | 6, fixedWidths: newWidths, fixedHeights: newHeights },
+          });
         }}
       >
         <ToggleButton value="2">2</ToggleButton>
@@ -62,6 +74,20 @@ export default function RowsContainerPanel({ data, setData }: RowsContainerPanel
         <ToggleButton value="5">5</ToggleButton>
         <ToggleButton value="6">6</ToggleButton>
       </RadioGroupInput>
+      <Typography variant="subtitle2" sx={{ display: 'block', color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
+        Height Controls
+      </Typography>
+      <RowHeightsInput
+        value={data.props?.fixedHeights}
+        rowsCount={rowsCount}
+        onChange={(fixedHeights) => {
+          updateData({ props: { fixedHeights } });
+        }}
+      />
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="subtitle2" sx={{ display: 'block', color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
+        Width Controls
+      </Typography>
       <RowWidthsInput
         value={data.props?.fixedWidths}
         rowsCount={rowsCount}

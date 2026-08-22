@@ -9,13 +9,14 @@ import {
   VerticalAlignCenterOutlined,
   VerticalAlignTopOutlined,
 } from '@mui/icons-material';
-import { ToggleButton } from '@mui/material';
+import { Divider, ToggleButton, Typography } from '@mui/material';
 
 import ColumnsContainerPropsSchema, {
   ColumnsContainerProps,
 } from '../../../../documents/blocks/ColumnsContainer/ColumnsContainerPropsSchema';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
+import ColumnHeightsInput from './helpers/inputs/ColumnHeightsInput';
 import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import SliderInput from './helpers/inputs/SliderInput';
@@ -52,12 +53,27 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         value={String(columnsCount)}
         onChange={(v) => {
           const count = v === '2' ? 2 : 3;
-          updateData({ props: { columnsCount: count, fixedWidths: [null, null, null] } });
+          updateData({
+            props: { columnsCount: count, fixedWidths: [null, null, null], fixedHeights: [null, null, null] },
+          });
         }}
       >
         <ToggleButton value="2">2</ToggleButton>
         <ToggleButton value="3">3</ToggleButton>
       </RadioGroupInput>
+      <Typography variant="subtitle2" sx={{ display: 'block', color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
+        Height Controls
+      </Typography>
+      <ColumnHeightsInput
+        defaultValue={data.props?.fixedHeights}
+        onChange={(fixedHeights) => {
+          updateData({ props: { fixedHeights } });
+        }}
+      />
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="subtitle2" sx={{ display: 'block', color: 'text.secondary', mb: 0.5, fontWeight: 500 }}>
+        Width Controls
+      </Typography>
       <ColumnWidthsInput
         defaultValue={data.props?.fixedWidths}
         onChange={(fixedWidths) => {

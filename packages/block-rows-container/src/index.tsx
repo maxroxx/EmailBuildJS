@@ -18,6 +18,7 @@ const PADDING_SCHEMA = z
   .nullable();
 
 const FIXED_WIDTHS_SCHEMA = z.array(z.number().nullish()).optional().nullable();
+const FIXED_HEIGHTS_SCHEMA = z.array(z.number().nullish()).optional().nullable();
 
 export const RowsContainerPropsSchema = z.object({
   style: z
@@ -30,6 +31,7 @@ export const RowsContainerPropsSchema = z.object({
   props: z
     .object({
       fixedWidths: FIXED_WIDTHS_SCHEMA,
+      fixedHeights: FIXED_HEIGHTS_SCHEMA,
       rowsCount: z
         .union([z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6)])
         .optional()
@@ -61,6 +63,7 @@ export function RowsContainer({ style, rows, props }: RowsContainerProps) {
     rowsCount: props?.rowsCount ?? RowsContainerPropsDefaults.rowsCount,
     contentAlignment: props?.contentAlignment ?? RowsContainerPropsDefaults.contentAlignment,
     fixedWidths: props?.fixedWidths,
+    fixedHeights: props?.fixedHeights,
     innerWidth: DEFAULT_CONTAINER_WIDTH,
   };
 
@@ -88,6 +91,7 @@ export function RowsContainer({ style, rows, props }: RowsContainerProps) {
 type RowWrapperProps = {
   props: {
     fixedWidths: z.infer<typeof FIXED_WIDTHS_SCHEMA>;
+    fixedHeights: z.infer<typeof FIXED_HEIGHTS_SCHEMA>;
     rowsCount: number;
     contentAlignment: 'top' | 'middle' | 'bottom';
     innerWidth: number;
@@ -100,6 +104,7 @@ function RowWrapper({ index, props, rows }: RowWrapperProps) {
   const contentAlignment = props?.contentAlignment ?? RowsContainerPropsDefaults.contentAlignment;
   const maxWidth = props?.fixedWidths?.[index] ?? getEqualMaxWidth(index, props);
   const widthValue = maxWidth ?? props.innerWidth;
+  const rowHeight = props?.fixedHeights?.[index];
 
   const children = rows?.[index];
   const renderedChildren = Array.isArray(children) ? <>{children}</> : children;
@@ -111,13 +116,19 @@ function RowWrapper({ index, props, rows }: RowWrapperProps) {
     width: maxWidth ? `${maxWidth}px` : '100%',
     maxWidth: maxWidth ? `${maxWidth}px` : '100%',
     verticalAlign: 'top',
-    minHeight: 40,
+    minHeight: rowHeight ?? 40,
     margin: 0,
     boxSizing: 'border-box',
   };
 
   return (
-    <div className={rowClass} style={rowStyle} data-row-width={widthValue} data-row-count={rowsCount}>
+    <div
+      className={rowClass}
+      style={rowStyle}
+      data-row-width={widthValue}
+      data-row-height={rowHeight}
+      data-row-count={rowsCount}
+    >
       <table
         width="100%"
         cellPadding="0"
@@ -135,6 +146,7 @@ function RowWrapper({ index, props, rows }: RowWrapperProps) {
                 fontSize: '16px',
                 paddingLeft: 0,
                 paddingRight: 0,
+                height: rowHeight ? `${rowHeight}px` : undefined,
               }}
             >
               {renderedChildren}

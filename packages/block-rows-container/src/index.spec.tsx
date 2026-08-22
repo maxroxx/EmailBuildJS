@@ -73,6 +73,38 @@ describe('block-rows-container', () => {
     });
   });
 
+  describe('fixedHeights', () => {
+    it('applies custom heights to rows', () => {
+      const rows = [<>wide</>, <>narrow</>, <>medium</>];
+      const { container } = render(
+        <RowsContainer props={{ rowsCount: 3, fixedHeights: [200, null, 100] }} rows={rows} />
+      );
+      const rowEls = Array.from(container.querySelectorAll('[class*="mj-row-per-"]')) as HTMLElement[];
+      expect(rowEls).toHaveLength(3);
+      expect(rowEls[0].style.minHeight).toBe('200px');
+      expect(rowEls[0].getAttribute('data-row-height')).toBe('200');
+      expect(rowEls[1].style.minHeight).toBe('40px');
+      expect(rowEls[1].getAttribute('data-row-height')).toBeNull();
+      expect(rowEls[2].style.minHeight).toBe('100px');
+      expect(rowEls[2].getAttribute('data-row-height')).toBe('100');
+    });
+
+    it('applies height to table cell td', () => {
+      const rows = [<>row1</>, <>row2</>];
+      const { container } = render(<RowsContainer props={{ rowsCount: 2, fixedHeights: [200, null] }} rows={rows} />);
+      const tds = Array.from(container.querySelectorAll('td')) as HTMLElement[];
+      expect(tds[0].style.height).toBe('200px');
+      expect(tds[1].style.height).toBe('');
+    });
+
+    it('renders snapshot with fixedHeights', () => {
+      const rows = [<>row1</>, <>row2</>, <>row3</>];
+      expect(
+        render(<RowsContainer props={{ rowsCount: 3, fixedHeights: [150, 100, null] }} rows={rows} />).asFragment()
+      ).toMatchSnapshot();
+    });
+  });
+
   describe('contentAlignment', () => {
     it('renders with top alignment', () => {
       const rows = [<>top</>, <>middle</>];

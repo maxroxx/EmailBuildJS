@@ -22,6 +22,11 @@ const FIXED_WIDTHS_SCHEMA = z
   .optional()
   .nullable();
 
+const FIXED_HEIGHTS_SCHEMA = z
+  .tuple([z.number().nullish(), z.number().nullish(), z.number().nullish()])
+  .optional()
+  .nullable();
+
 export const ColumnsContainerPropsSchema = z.object({
   style: z
     .object({
@@ -33,6 +38,7 @@ export const ColumnsContainerPropsSchema = z.object({
   props: z
     .object({
       fixedWidths: FIXED_WIDTHS_SCHEMA,
+      fixedHeights: FIXED_HEIGHTS_SCHEMA,
       columnsCount: z
         .union([z.literal(2), z.literal(3)])
         .optional()
@@ -66,6 +72,7 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
     columnsCount: props?.columnsCount ?? ColumnsContainerPropsDefaults.columnsCount,
     contentAlignment: props?.contentAlignment ?? ColumnsContainerPropsDefaults.contentAlignment,
     fixedWidths: props?.fixedWidths,
+    fixedHeights: props?.fixedHeights,
     innerWidth: DEFAULT_CONTAINER_WIDTH,
     columnsGap: props?.columnsGap ?? 0,
     marginBeforeFirst: props?.marginBeforeFirst ?? 0,
@@ -127,6 +134,7 @@ function GapSpacer({ width }: { width: number }) {
 type ColumnWrapperProps = {
   props: {
     fixedWidths: z.infer<typeof FIXED_WIDTHS_SCHEMA>;
+    fixedHeights: z.infer<typeof FIXED_HEIGHTS_SCHEMA>;
     columnsCount: 2 | 3;
     contentAlignment: 'top' | 'middle' | 'bottom';
     innerWidth: number;
@@ -157,6 +165,7 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
   const columnsGap = props?.columnsGap ?? 0;
   const marginBeforeFirst = props?.marginBeforeFirst ?? 0;
   const marginBeforeLast = props?.marginBeforeLast ?? 0;
+  const columnHeight = props?.fixedHeights?.[index];
 
   // The in-between gap must not come out of any single column's content:
   // instead every column gives up an equal share of the total spacing, so all
@@ -189,7 +198,7 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
         width: '100%',
         maxWidth: '100%',
         verticalAlign: 'top',
-        minHeight: 40,
+        minHeight: columnHeight ?? 40,
         margin: 0,
         boxSizing: 'border-box',
       }
@@ -199,7 +208,7 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
         width: 'calc(230400px - 48000%)',
         maxWidth: '100%',
         minWidth: `${desktopPercentage}%`,
-        minHeight: 40,
+        minHeight: columnHeight ?? 40,
         margin: 0,
         boxSizing: 'border-box',
       };
@@ -212,7 +221,13 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
   // indented by the gap, in any client.
 
   return (
-    <div className={columnClass} style={columnStyle} data-col-width={gapAwareWidth} data-col-count={columnsCount}>
+    <div
+      className={columnClass}
+      style={columnStyle}
+      data-col-width={gapAwareWidth}
+      data-col-height={columnHeight}
+      data-col-count={columnsCount}
+    >
       <table
         width="100%"
         cellPadding="0"
@@ -230,6 +245,7 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
                 fontSize: '16px',
                 paddingLeft: 0,
                 paddingRight: 0,
+                height: columnHeight ? `${columnHeight}px` : undefined,
               }}
             >
               {renderedChildren}
