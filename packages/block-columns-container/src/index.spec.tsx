@@ -28,21 +28,27 @@ describe('block-columns-container', () => {
     const marginProps = { columnsGap: 16, marginBeforeFirst: 12, marginBeforeLast: 20 };
     const columns = [<>bread</>, <>tomato</>, <>lettuce</>];
 
-    it('applies margins on desktop', () => {
+    it('applies gap spacers on desktop', () => {
       const { container } = render(<ColumnsContainer props={{ columnsCount: 3, ...marginProps }} columns={columns} />);
       const colEls = Array.from(container.querySelectorAll('[class*="mj-column-per-"]')) as HTMLElement[];
       expect(colEls).toHaveLength(3);
 
-      // First column: outer-left margin
-      expect(colEls[0].style.marginLeft).toBe('12px');
-      // Middle columns: between-gap on the left
-      expect(colEls[1].style.marginLeft).toBe('16px');
-      expect(colEls[2].style.marginLeft).toBe('16px');
-      // Last column: outer-right margin
-      expect(colEls[2].style.marginRight).toBe('20px');
+      // Columns themselves carry no margins
+      for (const col of colEls) {
+        expect(col.style.marginLeft).toBe('0px');
+        expect(col.style.marginRight).toBe('0px');
+      }
+
+      // The gap is carried by spacer elements: before first, between
+      // columns, after last
+      const spacers = Array.from(container.querySelectorAll('[data-col-gap]')) as HTMLElement[];
+      expect(spacers.map((el) => el.getAttribute('data-col-gap'))).toEqual(['12', '16', '16', '20']);
+      for (const spacer of spacers) {
+        expect(spacer.style.width).toBe(`${spacer.getAttribute('data-col-gap')}px`);
+      }
     });
 
-    it('does not apply margins on mobile', () => {
+    it('does not apply gaps on mobile', () => {
       const { container } = render(
         <ColumnsContainer props={{ columnsCount: 3, ...marginProps }} columns={columns} mobile />
       );
@@ -53,6 +59,9 @@ describe('block-columns-container', () => {
         expect(col.style.marginLeft).toBe('0px');
         expect(col.style.marginRight).toBe('0px');
       }
+
+      // No spacers either: the stacked view must have no horizontal spacing
+      expect(container.querySelectorAll('[data-col-gap]')).toHaveLength(0);
     });
 
     it('keeps all column boxes the same width when a gap is present', () => {

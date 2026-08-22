@@ -72,6 +72,11 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
     marginBeforeLast: props?.marginBeforeLast ?? 0,
   };
 
+  const columnsCount = blockProps.columnsCount;
+  const columnsGap = blockProps.columnsGap;
+  const marginBeforeFirst = blockProps.marginBeforeFirst;
+  const marginBeforeLast = blockProps.marginBeforeLast;
+
   return (
     <div style={wStyle}>
       <div
@@ -85,11 +90,37 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
           boxSizing: 'border-box',
         }}
       >
-        {[0, 1, 2].map((index) => (
-          <ColumnWrapper key={index} index={index} props={blockProps} columns={columns} mobile={mobile} />
-        ))}
+        {[0, 1, 2].map((index) => {
+          if (index >= columnsCount) {
+            return null;
+          }
+          const leadingGap = index === 0 ? marginBeforeFirst : columnsGap;
+          const trailingGap = index === columnsCount - 1 ? marginBeforeLast : 0;
+          return (
+            <React.Fragment key={index}>
+              {!mobile && leadingGap > 0 && <GapSpacer width={leadingGap} />}
+              <ColumnWrapper index={index} props={blockProps} columns={columns} mobile={mobile} />
+              {!mobile && trailingGap > 0 && <GapSpacer width={trailingGap} />}
+            </React.Fragment>
+          );
+        })}
       </div>
     </div>
+  );
+}
+
+// Gap spacers carry the column margins (before-first / between / after-last)
+// instead of the column boxes themselves. They are zero-height inline-blocks,
+// so on desktop they create the horizontal gap in the inline flow, while in
+// the stacked mobile view they collapse to invisible zero-height line breaks
+// and can never indent (stair-step) the stacked columns - even in clients
+// that ignore <style> media queries but keep inline styles (Gmail inbox).
+function GapSpacer({ width }: { width: number }) {
+  return (
+    <span
+      data-col-gap={width}
+      style={{ display: 'inline-block', width, maxWidth: '100%', height: 0, fontSize: 0, lineHeight: 0 }}
+    />
   );
 }
 
@@ -173,19 +204,12 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
         boxSizing: 'border-box',
       };
 
-  // Spacing is applied as external margins (with border-box) so the gap never
-  // comes out of any single column's content: every column has already given
-  // up an equal share of the total spacing via gapAwareWidth, and the margins
-  // simply place the freed space between (and around) the equal boxes.
-  // "Before first" frames the outer-left gap, "before last" frames the
-  // outer-right gap, and the gap between adjacent columns comes from the left
-  // margin of every column after the first.
-  // Margins are desktop-only: on mobile the columns stack full-width with no
-  // horizontal spacing, so the margins are left at 0.
-  if (!mobile) {
-    columnStyle.marginLeft = index === 0 ? marginBeforeFirst : columnsGap;
-    columnStyle.marginRight = index === columnsCount - 1 ? marginBeforeLast : 0;
-  }
+  // The horizontal spacing is NOT applied as margins on the column box:
+  // every column has already given up an equal share of the total spacing
+  // via gapAwareWidth, and the freed space is placed by GapSpacer elements
+  // rendered between (and around) the columns by ColumnsContainer. Keeping
+  // the boxes margin-free means the stacked mobile view can never be
+  // indented by the gap, in any client.
 
   return (
     <div className={columnClass} style={columnStyle} data-col-width={gapAwareWidth} data-col-count={columnsCount}>

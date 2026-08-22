@@ -87,7 +87,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         marks
       />
       <SliderInput
-        label="Margin before last"
+        label="Margin after last"
         iconLabel={<AlignHorizontalRightOutlined sx={{ fontSize: 16 }} />}
         defaultValue={data.props?.marginBeforeLast ?? 0}
         onChange={(marginBeforeLast) => updateData({ props: { marginBeforeLast } })}

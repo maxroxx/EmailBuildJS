@@ -16,6 +16,12 @@ function readProps(el: Element) {
   };
 }
 
+function readGaps(container: HTMLElement) {
+  return Array.from(container.querySelectorAll('[data-col-gap]'))
+    .map((el) => el.getAttribute('data-col-gap'))
+    .filter((v): v is string => v !== null);
+}
+
 describe('colwidth equality', () => {
   it('renders two equal columns with a gap', () => {
     const { container } = render(
@@ -31,9 +37,12 @@ describe('colwidth equality', () => {
     expect(first.minWidth).toBeTruthy();
     expect(first.minWidth).toBe(second.minWidth);
     expect(first.colWidth).toBe(second.colWidth);
-    expect(first.marginLeft).toBe('12px');
-    expect(second.marginLeft).toBe('16px');
-    expect(second.marginRight).toBe('20px');
+
+    // Columns stay margin-free; the gap is carried by spacers
+    expect(first.marginLeft).toBe('0px');
+    expect(second.marginLeft).toBe('0px');
+    expect(second.marginRight).toBe('0px');
+    expect(readGaps(container)).toEqual(['12', '16', '20']);
   });
 
   it('renders three equal columns with a gap', () => {
@@ -50,9 +59,12 @@ describe('colwidth equality', () => {
     expect(props[0].minWidth).toBeTruthy();
     expect(new Set(props.map((p) => p.minWidth)).size).toBe(1);
     expect(new Set(props.map((p) => p.colWidth)).size).toBe(1);
-    expect(props[0].marginLeft).toBe('12px');
-    expect(props[1].marginLeft).toBe('16px');
-    expect(props[2].marginLeft).toBe('16px');
-    expect(props[2].marginRight).toBe('20px');
+
+    // Columns stay margin-free; the gap is carried by spacers
+    for (const p of props) {
+      expect(p.marginLeft).toBe('0px');
+      expect(p.marginRight).toBe('0px');
+    }
+    expect(readGaps(container)).toEqual(['12', '16', '16', '20']);
   });
 });

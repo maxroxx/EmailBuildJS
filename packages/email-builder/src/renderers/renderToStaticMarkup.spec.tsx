@@ -496,12 +496,65 @@ describe('renderToStaticMarkup', () => {
       const minWidths = colTags.map((tag) => tag.match(/min-width:([\d.]+)%/)?.[1]);
       expect(new Set(minWidths).size).toBe(1);
 
-      // Gap is applied as external margins on the column divs: first frames the
-      // outer-left gap, middle columns the between-gap, last the outer-right gap.
-      const zeroAwareMargins = [...result.matchAll(/margin-left:([\d.]+(?:px)?);margin-right:([\d.]+(?:px)?)/g)].map(
-        (m) => `${m[1]}/${m[2]}`
+      // Column divs are margin-free: no inline margin-left/right with a
+      // non-zero value anywhere on a column.
+      for (const tag of colTags) {
+        expect(tag).not.toMatch(/margin-left:\d+px/);
+        expect(tag).not.toMatch(/margin-right:\d+px/);
+      }
+
+      // The gap is carried by spacer elements: before first, between
+      // columns, after last.
+      const gaps = [...result.matchAll(/data-col-gap="(\d+)"/g)].map((m) => m[1]);
+      expect(gaps).toEqual(['12', '16', '16', '20']);
+    });
+
+    it('removes all margins in the mobile media query', () => {
+      const result = renderToStaticMarkup(
+        {
+          root: {
+            type: 'EmailLayout',
+            data: {
+              backdropColor: '#F5F5F5',
+              canvasColor: '#FFFFFF',
+              textColor: '#262626',
+              fontFamily: 'MODERN_SANS',
+              childrenIds: ['block_cols'],
+            },
+          },
+          block_cols: {
+            type: 'ColumnsContainer',
+            data: {
+              style: {
+                backgroundColor: null,
+                padding: { top: 24, bottom: 24, left: 24, right: 24 },
+              },
+              props: {
+                columnsCount: 2,
+                columnsGap: 16,
+                marginBeforeFirst: 12,
+                marginBeforeLast: 20,
+                columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
+              },
+            },
+          },
+        },
+        { rootBlockId: 'root' }
       );
-      expect(zeroAwareMargins).toEqual(['12px/0', '16px/0', '16px/20px']);
+
+      // Desktop keeps the gap as inline spacers, and column divs carry no
+      // horizontal margins (so nothing can stair-step in stacked view)
+      expect(result).toContain('data-col-gap="12"');
+      expect(result).toContain('data-col-gap="16"');
+      expect(result).toContain('data-col-gap="20"');
+      expect(result).not.toContain('margin-left:12px');
+      expect(result).not.toContain('margin-right:20px');
+
+      // Mobile media query still defensively strips every horizontal margin
+      // so stacked columns never stair-step in clients that honor <style>
+      const mediaQuery = result.match(/@media only screen and \(max-width:480px\) \{([\s\S]*?)\}/)?.[1] ?? '';
+      expect(mediaQuery).toContain('margin-left: 0 !important;');
+      expect(mediaQuery).toContain('margin-right: 0 !important;');
     });
   });
 

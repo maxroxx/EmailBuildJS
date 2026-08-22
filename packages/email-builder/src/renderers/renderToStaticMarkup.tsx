@@ -346,6 +346,8 @@ function generateResponsiveStyles(specs: TColumnSpec[]): string {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }`;
