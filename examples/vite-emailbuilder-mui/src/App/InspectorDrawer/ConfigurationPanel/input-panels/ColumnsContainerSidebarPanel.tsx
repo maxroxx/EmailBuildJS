@@ -143,7 +143,10 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         value={data.props?.contentAlignment ?? 'middle'}
         onChange={(v) => {
           updateData({
-            props: { contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+            props: {
+              contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined,
+              columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
+            },
           });
         }}
       >
