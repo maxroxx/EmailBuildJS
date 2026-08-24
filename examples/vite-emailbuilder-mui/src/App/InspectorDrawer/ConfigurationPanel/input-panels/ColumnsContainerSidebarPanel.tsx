@@ -141,9 +141,9 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
       <RadioGroupInput
         label="Alignment"
         value={data.props?.contentAlignment ?? 'middle'}
-        onChange={(contentAlignment) => {
+        onChange={(v) => {
           updateData({
-            props: { contentAlignment, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+            props: { contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
           });
         }}
       >

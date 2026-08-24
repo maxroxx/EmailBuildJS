@@ -98,8 +98,8 @@ export default function RowsContainerPanel({ data, setData }: RowsContainerPanel
       <RadioGroupInput
         label="Alignment"
         value={data.props?.contentAlignment ?? 'middle'}
-        onChange={(contentAlignment) => {
-          updateData({ props: { contentAlignment } });
+        onChange={(v: string) => {
+          updateData({ props: { contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined } });
         }}
       >
         <ToggleButton value="top">
