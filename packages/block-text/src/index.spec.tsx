@@ -526,6 +526,36 @@ Powered by [Waypoint](https://usewaypoint.com)`,
       const html = lexicalToHTML(lexical);
       expect(html).toBe('<p style="margin:0"></p>');
     });
+
+    it('emits inline color, background-color and font-size for output (regression guard)', () => {
+      const lexical: LexicalEditorState = {
+        root: {
+          type: 'paragraph',
+          format: '',
+          indent: 0,
+          direction: 'ltr',
+          children: [
+            {
+              type: 'text',
+              format: '',
+              indent: 0,
+              direction: 'ltr',
+              children: [],
+              version: 1,
+              detail: 0,
+              mode: 'normal',
+              style: 'color:#ffff00;background-color:#00ffff;font-size:32px',
+              text: 'Styled',
+            } as LexicalTextNode,
+          ],
+          version: 1,
+        },
+      };
+      const html = lexicalToHTML(lexical);
+      expect(html).toContain('color:#ffff00');
+      expect(html).toContain('background-color:#00ffff');
+      expect(html).toContain('font-size:32px');
+    });
   });
 
   // =============================================================================

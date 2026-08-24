@@ -41,6 +41,7 @@ function cloneBlock(document: TEditorConfiguration, blockId: string): TEditorBlo
       }
       return clone;
   }
+  return clone;
 }
 
 export default function cloneDocumentBlock(originalDocument: TEditorConfiguration, originalBlockId: string): TResult {

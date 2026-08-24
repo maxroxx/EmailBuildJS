@@ -141,6 +141,38 @@ function LexicalErrorBoundary({ children }: { children: React.ReactNode }) {
 }
 
 // =============================================================================
+// Neutral CSS for editor surface — overrides inline node styles so the field
+// always stays readable regardless of which color/background/font-size are
+// stored in the data.  Only the display is neutralised; lexicalToHTML (used
+// by the canvas and HTML output) keeps emitting full styles.
+// =============================================================================
+
+const NEUTRAL_CSS = `
+.eb-lexical-editor { background-color: #fff !important; }
+.eb-lexical-editor,
+.eb-lexical-editor * {
+  color: #242424 !important;
+  font-size: 14px !important;
+}
+.eb-lexical-editor * { background-color: transparent !important; }
+.eb-placeholder,
+.eb-placeholder * {
+  color: #999 !important;
+}
+`;
+
+let neutralCssInjected = false;
+function ensureNeutralCss() {
+  if (neutralCssInjected) {
+    return;
+  }
+  neutralCssInjected = true;
+  const style = document.createElement('style');
+  style.textContent = NEUTRAL_CSS;
+  document.head.appendChild(style);
+}
+
+// =============================================================================
 // Internal: Sync external content changes into the editor
 // =============================================================================
 
@@ -524,6 +556,10 @@ function LexicalEditorInner({
 
   useLexicalOnChange(editor, handleChange);
 
+  useEffect(() => {
+    ensureNeutralCss();
+  }, []);
+
   const contentEditableStyle: React.CSSProperties = {
     minHeight: 160,
     maxHeight: 240,
@@ -539,11 +575,12 @@ function LexicalEditorInner({
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div className="eb-lexical-editor" style={{ position: 'relative' }}>
       <RichTextPlugin
         contentEditable={<ContentEditable style={contentEditableStyle} />}
         placeholder={
           <div
+            className="eb-placeholder"
             style={{
               position: 'absolute',
               top: 0,

@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TextField, Typography } from '@mui/material';
 
 type TextDimensionInputProps = {
   label: string;
-  defaultValue: number | null | undefined;
+  value: number | null | undefined;
   onChange: (v: number | null) => void;
 };
-export default function TextDimensionInput({ label, defaultValue, onChange }: TextDimensionInputProps) {
+export default function TextDimensionInput({ label, value, onChange }: TextDimensionInputProps) {
+  const [internalValue, setInternalValue] = useState<string>(value != null ? String(value) : '');
+
+  useEffect(() => {
+    setInternalValue(value != null ? String(value) : '');
+  }, [value]);
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
-    const value = parseInt(ev.target.value);
-    onChange(isNaN(value) ? null : value);
+    const parsed = parseInt(ev.target.value);
+    setInternalValue(ev.target.value);
+    onChange(isNaN(parsed) ? null : parsed);
   };
+
   return (
     <TextField
       fullWidth
+      value={internalValue}
       onChange={handleChange}
-      defaultValue={defaultValue}
       label={label}
       variant="standard"
       placeholder="auto"

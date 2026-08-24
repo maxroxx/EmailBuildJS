@@ -1,11 +1,18 @@
 import React from 'react';
 
-import { ArrowDownwardOutlined, ArrowUpwardOutlined, ContentCopyOutlined, DeleteOutlined } from '@mui/icons-material';
-import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
+import {
+  ArrowBackOutlined,
+  ArrowDownwardOutlined,
+  ArrowUpwardOutlined,
+  ContentCopyOutlined,
+  DeleteOutlined,
+} from '@mui/icons-material';
+import { Divider, IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 
 import { TEditorBlock, TEditorConfiguration } from '../../../editor/core';
 import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
+import { RowsContainerProps } from '../../RowsContainer/RowsContainerPropsSchema';
 import cloneDocumentBlock from '../cloneDocumentBlock';
 
 const sx: SxProps = {
@@ -40,6 +47,55 @@ function findParentBlockId(blockId: string, document: TEditorConfiguration) {
           return id;
         }
         break;
+      case 'RowsContainer':
+        if (block.data.props?.rows?.some((row) => row.childrenIds?.includes(blockId))) {
+          return id;
+        }
+        break;
+    }
+  }
+  return null;
+}
+
+function findSiblingIndex(blockId: string, document: TEditorConfiguration) {
+  for (const [id, b] of Object.entries(document)) {
+    if (id === blockId) {
+      continue;
+    }
+    const block = b as TEditorBlock;
+    switch (block.type) {
+      case 'EmailLayout': {
+        const index = block.data.childrenIds?.indexOf(blockId) ?? -1;
+        if (index >= 0) {
+          return { parentId: id, childrenIds: block.data.childrenIds, index };
+        }
+        break;
+      }
+      case 'Container': {
+        const index = block.data.props?.childrenIds?.indexOf(blockId) ?? -1;
+        if (index >= 0) {
+          return { parentId: id, childrenIds: block.data.props?.childrenIds, index };
+        }
+        break;
+      }
+      case 'ColumnsContainer': {
+        for (const col of block.data.props?.columns ?? []) {
+          const index = col.childrenIds?.indexOf(blockId) ?? -1;
+          if (index >= 0) {
+            return { parentId: id, childrenIds: col.childrenIds, index };
+          }
+        }
+        break;
+      }
+      case 'RowsContainer': {
+        for (const row of block.data.props?.rows ?? []) {
+          const index = row.childrenIds?.indexOf(blockId) ?? -1;
+          if (index >= 0) {
+            return { parentId: id, childrenIds: row.childrenIds, index };
+          }
+        }
+        break;
+      }
     }
   }
   return null;
@@ -50,6 +106,27 @@ type Props = {
 };
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
+
+  const handleSelectParentClick = () => {
+    const parentId = findParentBlockId(blockId, document);
+    if (parentId) {
+      setSelectedBlockId(parentId);
+    }
+  };
+
+  const handleSelectPreviousSiblingClick = () => {
+    const info = findSiblingIndex(blockId, document);
+    if (info && info.index > 0) {
+      setSelectedBlockId(info.childrenIds![info.index - 1]);
+    }
+  };
+
+  const handleSelectNextSiblingClick = () => {
+    const info = findSiblingIndex(blockId, document);
+    if (info && info.index < (info.childrenIds?.length ?? 0) - 1) {
+      setSelectedBlockId(info.childrenIds![info.index + 1]);
+    }
+  };
 
   const handleDuplicateClick = () => {
     const parentBlockId = findParentBlockId(blockId, document);
@@ -87,6 +164,18 @@ export default function TuneMenu({ blockId }: Props) {
             if (column.childrenIds.includes(blockId)) {
               const index = column.childrenIds.indexOf(blockId);
               column.childrenIds.splice(index + 1, 0, newBlockId);
+            }
+          }
+          break;
+        case 'RowsContainer':
+          if (!parentBlock.data.props) {
+            parentBlock.data.props = { rows: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] };
+          }
+
+          for (const row of parentBlock.data.props.rows) {
+            if (row.childrenIds.includes(blockId)) {
+              const index = row.childrenIds.indexOf(blockId);
+              row.childrenIds.splice(index + 1, 0, newBlockId);
             }
           }
           break;
@@ -145,6 +234,20 @@ export default function TuneMenu({ blockId }: Props) {
                 })),
               },
             } as ColumnsContainerProps,
+          };
+          break;
+        case 'RowsContainer':
+          nDocument[id] = {
+            type: 'RowsContainer',
+            data: {
+              style: block.data.style,
+              props: {
+                ...block.data.props,
+                rows: block.data.props?.rows?.map((r) => ({
+                  childrenIds: filterChildrenIds(r.childrenIds),
+                })),
+              },
+            } as RowsContainerProps,
           };
           break;
         default:
@@ -217,6 +320,20 @@ export default function TuneMenu({ blockId }: Props) {
             } as ColumnsContainerProps,
           };
           break;
+        case 'RowsContainer':
+          nDocument[id] = {
+            type: 'RowsContainer',
+            data: {
+              style: block.data.style,
+              props: {
+                ...block.data.props,
+                rows: block.data.props?.rows?.map((r) => ({
+                  childrenIds: moveChildrenIds(r.childrenIds),
+                })),
+              },
+            } as RowsContainerProps,
+          };
+          break;
         default:
           nDocument[id] = block;
       }
@@ -229,6 +346,44 @@ export default function TuneMenu({ blockId }: Props) {
   return (
     <Paper sx={sx} onClick={(ev) => ev.stopPropagation()}>
       <Stack>
+        <Tooltip title="Select parent" placement="left-start">
+          <span style={{ display: 'flex' }}>
+            <IconButton
+              onClick={handleSelectParentClick}
+              disabled={findParentBlockId(blockId, document) === null}
+              sx={{ color: 'text.primary' }}
+            >
+              <ArrowBackOutlined fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Tooltip title="Select previous sibling" placement="left-start">
+          <span style={{ display: 'flex' }}>
+            <IconButton
+              onClick={handleSelectPreviousSiblingClick}
+              disabled={findSiblingIndex(blockId, document) === null || findSiblingIndex(blockId, document)!.index <= 0}
+              sx={{ color: 'text.primary' }}
+            >
+              <ArrowUpwardOutlined fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Tooltip title="Select next sibling" placement="left-start">
+          <span style={{ display: 'flex' }}>
+            <IconButton
+              onClick={handleSelectNextSiblingClick}
+              disabled={
+                findSiblingIndex(blockId, document) === null ||
+                findSiblingIndex(blockId, document)!.index >=
+                  (findSiblingIndex(blockId, document)!.childrenIds?.length ?? 0) - 1
+              }
+              sx={{ color: 'text.primary' }}
+            >
+              <ArrowDownwardOutlined fontSize="small" />
+            </IconButton>
+          </span>
+        </Tooltip>
+        <Divider sx={{ borderColor: 'divider', my: 0.5 }} />
         <Tooltip title="Move up" placement="left-start">
           <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.primary' }}>
             <ArrowUpwardOutlined fontSize="small" />

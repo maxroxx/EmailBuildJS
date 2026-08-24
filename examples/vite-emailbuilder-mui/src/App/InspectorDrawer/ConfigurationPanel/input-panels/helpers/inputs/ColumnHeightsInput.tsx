@@ -4,22 +4,22 @@ import { Stack } from '@mui/material';
 
 import TextDimensionInput from './TextDimensionInput';
 
-export const DEFAULT_2_COLUMNS = [6] as [number];
-export const DEFAULT_3_COLUMNS = [4, 8] as [number, number];
+export const DEFAULT_2_COLUMNS_HEIGHT = [null] as [number | null];
+export const DEFAULT_3_COLUMNS_HEIGHT = [null, null] as [number | null, number | null];
 
-type TWidthValue = number | null | undefined;
-type FixedWidths = [
+type THeightValue = number | null | undefined;
+type FixedHeights = [
   //
   number | null | undefined,
   number | null | undefined,
   number | null | undefined,
 ];
-type ColumnsLayoutInputProps = {
-  defaultValue: FixedWidths | null | undefined;
-  onChange: (v: FixedWidths | null | undefined) => void;
+type ColumnHeightsInputProps = {
+  defaultValue: FixedHeights | null | undefined;
+  onChange: (v: FixedHeights | null | undefined) => void;
 };
-export default function ColumnWidthsInput({ defaultValue, onChange }: ColumnsLayoutInputProps) {
-  const [currentValue, setCurrentValue] = useState<[TWidthValue, TWidthValue, TWidthValue]>(() => {
+export default function ColumnHeightsInput({ defaultValue, onChange }: ColumnHeightsInputProps) {
+  const [currentValue, setCurrentValue] = useState<[THeightValue, THeightValue, THeightValue]>(() => {
     if (defaultValue) {
       return defaultValue;
     }
@@ -27,7 +27,7 @@ export default function ColumnWidthsInput({ defaultValue, onChange }: ColumnsLay
   });
 
   const setIndexValue = (index: 0 | 1 | 2, value: number | null | undefined) => {
-    const nValue: FixedWidths = [...currentValue];
+    const nValue: FixedHeights = [...currentValue];
     nValue[index] = value;
     setCurrentValue(nValue);
     onChange(nValue);

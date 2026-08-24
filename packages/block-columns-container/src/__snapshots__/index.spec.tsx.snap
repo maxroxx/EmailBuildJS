@@ -149,6 +149,95 @@ exports[`block-columns-container columnsCount 3 renders column children 1`] = `
 </DocumentFragment>
 `;
 
+exports[`block-columns-container fixedHeights renders snapshot with fixedHeights 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="mj-column-wrapper"
+      style="font-size: 0px; text-align: left; padding-left: 1px; padding-right: 1px; box-sizing: border-box;"
+    >
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-height="150"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 150px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px; height: 150px;"
+              >
+                col1
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-height="100"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 100px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px; height: 100px;"
+              >
+                col2
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="mj-column-per-33"
+        data-col-count="3"
+        data-col-width="200"
+        style="display: inline-block; vertical-align: middle; width: calc(230400px - 48000%); max-width: 100%; min-width: 33.277591973244%; min-height: 40px; margin: 0px; box-sizing: border-box;"
+      >
+        <table
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          role="presentation"
+          style="border-collapse: collapse; border-spacing: 0px;"
+          width="100%"
+        >
+          <tbody>
+            <tr>
+              <td
+                style="box-sizing: content-box; vertical-align: middle; font-size: 16px; padding-left: 0px; padding-right: 0px;"
+              >
+                col3
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`block-columns-container renders with default values 1`] = `
 <DocumentFragment>
   <div>

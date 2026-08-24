@@ -21,6 +21,8 @@ import { ContainerPropsSchema } from '../blocks/Container/ContainerPropsSchema';
 import ContainerReader from '../blocks/Container/ContainerReader';
 import { EmailLayoutPropsSchema } from '../blocks/EmailLayout/EmailLayoutPropsSchema';
 import EmailLayoutReader from '../blocks/EmailLayout/EmailLayoutReader';
+import RowsContainerPropsSchema from '../blocks/RowsContainer/RowsContainerPropsSchema';
+import RowsContainerReader from '../blocks/RowsContainer/RowsContainerReader';
 
 const ReaderContext = createContext<TReaderDocument>({});
 
@@ -48,6 +50,10 @@ const READER_DICTIONARY = buildBlockConfigurationDictionary({
   EmailLayout: {
     schema: EmailLayoutPropsSchema,
     Component: EmailLayoutReader,
+  },
+  RowsContainer: {
+    schema: RowsContainerPropsSchema,
+    Component: RowsContainerReader,
   },
   //
   Avatar: {

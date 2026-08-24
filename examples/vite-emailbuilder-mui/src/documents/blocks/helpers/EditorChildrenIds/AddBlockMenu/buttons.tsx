@@ -11,6 +11,7 @@ import {
   NotesOutlined,
   SmartButtonOutlined,
   ViewColumnOutlined,
+  ViewListOutlined,
 } from '@mui/icons-material';
 
 import { TEditorBlock } from '../../../../editor/core';
@@ -139,6 +140,21 @@ export const BUTTONS: TButtonProps[] = [
           columnsGap: 16,
           columnsCount: 3,
           columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
+        },
+        style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
+      },
+    }),
+  },
+  {
+    label: 'Rows',
+    icon: <ViewListOutlined />,
+    block: () => ({
+      type: 'RowsContainer',
+      data: {
+        props: {
+          rowsGap: 16,
+          rowsCount: 3,
+          rows: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
         },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
       },

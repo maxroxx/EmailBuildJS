@@ -14,6 +14,7 @@ import EmailLayoutSidebarPanel from './input-panels/EmailLayoutSidebarPanel';
 import HeadingSidebarPanel from './input-panels/HeadingSidebarPanel';
 import HtmlSidebarPanel from './input-panels/HtmlSidebarPanel';
 import ImageSidebarPanel from './input-panels/ImageSidebarPanel';
+import RowsContainerSidebarPanel from './input-panels/RowsContainerSidebarPanel';
 import SpacerSidebarPanel from './input-panels/SpacerSidebarPanel';
 import TextSidebarPanel from './input-panels/TextSidebarPanel';
 
@@ -50,6 +51,10 @@ export default function ConfigurationPanel() {
       );
     case 'Container':
       return <ContainerSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
+    case 'RowsContainer':
+      return (
+        <RowsContainerSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />
+      );
     case 'Divider':
       return <DividerSidebarPanel key={selectedBlockId} data={data} setData={(data) => setBlock({ type, data })} />;
     case 'Heading':

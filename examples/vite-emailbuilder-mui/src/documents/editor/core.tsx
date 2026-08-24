@@ -22,6 +22,8 @@ import ContainerPropsSchema from '../blocks/Container/ContainerPropsSchema';
 import EmailLayoutEditor from '../blocks/EmailLayout/EmailLayoutEditor';
 import EmailLayoutPropsSchema from '../blocks/EmailLayout/EmailLayoutPropsSchema';
 import EditorBlockWrapper from '../blocks/helpers/block-wrappers/EditorBlockWrapper';
+import RowsContainerEditor from '../blocks/RowsContainer/RowsContainerEditor';
+import RowsContainerPropsSchema from '../blocks/RowsContainer/RowsContainerPropsSchema';
 
 const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
   Avatar: {
@@ -61,6 +63,14 @@ const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
     Component: (props) => (
       <EditorBlockWrapper>
         <Heading {...props} />
+      </EditorBlockWrapper>
+    ),
+  },
+  RowsContainer: {
+    schema: RowsContainerPropsSchema,
+    Component: (props) => (
+      <EditorBlockWrapper>
+        <RowsContainerEditor {...props} />
       </EditorBlockWrapper>
     ),
   },

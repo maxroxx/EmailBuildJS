@@ -14,7 +14,7 @@ export default function FontWeightInput({ label, defaultValue, onChange }: Props
   return (
     <RadioGroupInput
       label={label}
-      defaultValue={value}
+      value={value}
       onChange={(fontWeight) => {
         setValue(fontWeight);
         onChange(fontWeight);

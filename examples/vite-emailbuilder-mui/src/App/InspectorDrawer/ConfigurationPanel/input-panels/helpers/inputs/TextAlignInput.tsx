@@ -16,7 +16,7 @@ export default function TextAlignInput({ label, defaultValue, onChange }: Props)
   return (
     <RadioGroupInput
       label={label}
-      defaultValue={value}
+      value={value}
       onChange={(value) => {
         setValue(value);
         onChange(value);
