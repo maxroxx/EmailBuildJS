@@ -21,9 +21,9 @@ export default function RowsContainerEditor({ style, props }: RowsContainerProps
   const currentBlockId = useCurrentBlockId();
   const screenSize = useSelectedScreenSize();
 
-  const { rows, ...restProps } = props ?? {};
-  const rowsValue = rows ?? EMPTY_ROWS;
-  const rowsCount = restProps?.rowsCount ?? 3;
+  const rowsValue = props?.rows ?? EMPTY_ROWS;
+  const rowsCount = props?.rowsCount ?? 3;
+  const { ...restProps } = props ?? {};
 
   const updateRow = (rowIndex: number, { block, blockId, childrenIds }: EditorChildrenChange) => {
     const nRows = [...rowsValue];
@@ -56,7 +56,7 @@ export default function RowsContainerEditor({ style, props }: RowsContainerProps
           key={i}
           showTrailingButton={false}
           showLeadingButton={false}
-          childrenIds={rows?.[i]?.childrenIds}
+          childrenIds={rowsValue?.[i]?.childrenIds}
           onChange={(change) => updateRow(i, change)}
         />
       ))}
