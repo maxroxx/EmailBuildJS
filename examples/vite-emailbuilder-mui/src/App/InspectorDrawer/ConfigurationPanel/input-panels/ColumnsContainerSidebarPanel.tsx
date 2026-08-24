@@ -31,18 +31,14 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
 
   const columnsCount = data.props?.columnsCount ?? 2;
 
-const updateData = (partial: Partial<ColumnsContainerProps>) => {
+  const updateData = (partial: Partial<ColumnsContainerProps>) => {
     const newData = {
       ...data,
       ...partial,
       props: {
         ...data.props,
         ...partial.props,
-        columns: [
-          { childrenIds: [] },
-          { childrenIds: [] },
-          { childrenIds: [] },
-        ],
+        columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
       },
     };
     const res = ColumnsContainerPropsSchema.safeParse(newData);
@@ -62,11 +58,12 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
         onChange={(v) => {
           const count = v === '2' ? 2 : 3;
           updateData({
-            props: { columnsCount: count, fixedWidths: [null, null, null], fixedHeights: [null, null, null], columns: [
-              { childrenIds: [] },
-              { childrenIds: [] },
-              { childrenIds: [] },
-            ] },
+            props: {
+              columnsCount: count,
+              fixedWidths: [null, null, null],
+              fixedHeights: [null, null, null],
+              columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
+            },
           });
         }}
       >
@@ -79,11 +76,9 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
       <ColumnHeightsInput
         defaultValue={data.props?.fixedHeights}
         onChange={(fixedHeights) => {
-          updateData({ props: { fixedHeights, columns: [
-            { childrenIds: [] },
-            { childrenIds: [] },
-            { childrenIds: [] },
-          ] } });
+          updateData({
+            props: { fixedHeights, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          });
         }}
       />
       <Divider sx={{ my: 2 }} />
@@ -93,22 +88,20 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
       <ColumnWidthsInput
         defaultValue={data.props?.fixedWidths}
         onChange={(fixedWidths) => {
-          updateData({ props: { fixedWidths, columns: [
-            { childrenIds: [] },
-            { childrenIds: [] },
-            { childrenIds: [] },
-          ] } });
+          updateData({
+            props: { fixedWidths, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          });
         }}
       />
       <SliderInput
         label="Margin before first"
         iconLabel={<AlignHorizontalLeftOutlined sx={{ fontSize: 16 }} />}
         defaultValue={data.props?.marginBeforeFirst ?? 0}
-        onChange={(marginBeforeFirst) => updateData({ props: { marginBeforeFirst, columns: [
-          { childrenIds: [] },
-          { childrenIds: [] },
-          { childrenIds: [] },
-        ] } })}
+        onChange={(marginBeforeFirst) =>
+          updateData({
+            props: { marginBeforeFirst, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          })
+        }
         units="px"
         step={4}
         min={0}
@@ -119,11 +112,11 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
         label="Margin between columns"
         iconLabel={<SwapHorizOutlined sx={{ fontSize: 16 }} />}
         defaultValue={data.props?.columnsGap ?? 0}
-        onChange={(columnsGap) => updateData({ props: { columnsGap, columns: [
-          { childrenIds: [] },
-          { childrenIds: [] },
-          { childrenIds: [] },
-        ] } })}
+        onChange={(columnsGap) =>
+          updateData({
+            props: { columnsGap, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          })
+        }
         units="px"
         step={4}
         min={0}
@@ -134,11 +127,11 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
         label="Margin after last"
         iconLabel={<AlignHorizontalRightOutlined sx={{ fontSize: 16 }} />}
         defaultValue={data.props?.marginBeforeLast ?? 0}
-        onChange={(marginBeforeLast) => updateData({ props: { marginBeforeLast, columns: [
-          { childrenIds: [] },
-          { childrenIds: [] },
-          { childrenIds: [] },
-        ] } })}
+        onChange={(marginBeforeLast) =>
+          updateData({
+            props: { marginBeforeLast, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          })
+        }
         units="px"
         step={4}
         min={0}
@@ -149,11 +142,9 @@ const updateData = (partial: Partial<ColumnsContainerProps>) => {
         label="Alignment"
         value={data.props?.contentAlignment ?? 'middle'}
         onChange={(contentAlignment) => {
-          updateData({ props: { contentAlignment, columns: [
-            { childrenIds: [] },
-            { childrenIds: [] },
-            { childrenIds: [] },
-          ] } });
+          updateData({
+            props: { contentAlignment, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+          });
         }}
       >
         <ToggleButton value="top">
