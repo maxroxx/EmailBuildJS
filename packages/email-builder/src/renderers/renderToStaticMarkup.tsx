@@ -258,17 +258,17 @@ function fixInlineColumnStyles(html: string): string {
     }
     const widthPx = parseFloat(widthMatch[1]);
     const percentage = Math.round((widthPx / EMAIL_WIDTH) * 100 * 1e12) / 1e12;
-    // Fallback px keeps n * fallbackPx within the real content width so
-    // clients without calc() support (e.g. Gmail Inbox, which drops both
-    // <style> and calc()) never wrap: 600 - 48px default block padding -
-    // client slop (Gmail desktop shown ~548px content). calc() clients
-    // ignore these via the later % min-width.
+    // Fallback px for clients that do not support percentage widths.
+    // The desktop layout is carried by the gap-aware min-width percentage
+    // below; the calc-based Fab Four trick was removed because it derived
+    // the stacking breakpoint from the available content width, which
+    // shifted with margin size.
     const fallbackPx = Math.max(1, Math.floor(((EMAIL_WIDTH - 60) * percentage) / 100));
     // Desktop min-width targets (share - 1px) for 3 columns and (share - 1.5px)
-    // for 2 columns, expressed against the wrapper's content width (email
-    // width minus its 2px margins). This keeps the visible total under the
+    // for 2 columns, expressed against the email's content width (email width
+    // minus its 2px margins). This keeps the visible total under the
     // email width (599px) so equal columns NEVER sum to exactly 600 -
-    // avoiding the sub-pixel exact-fit wrap in calc() clients (browser,
+    // avoiding the sub-pixel exact-fit wrap in percentage clients (browser,
     // Apple Mail, Gmail Compose) - while leaving only a ~1px-per-column
     // gap. The leftover 2px margins put a 1px breathing gap at each side of
     // the block for a balanced look when columns have background colours.
@@ -277,11 +277,9 @@ function fixInlineColumnStyles(html: string): string {
     const desktopTarget = widthPx - (columnCount === 2 ? 1.5 : 1);
     const desktopPercentage = Math.round((desktopTarget / desktopCoreWidth) * 100 * 1e12) / 1e12;
 
-    // Fab Four (no media query needed): below 480px the calc() grows past
-    // max-width:100% (full-width stacked), above 480px it drops below the
-    // min-width (desktop percentages). Pixel declarations first act as the
-    // fallback for clients that do not support calc().
-    const newStyle = `display:inline-block;min-width:${fallbackPx}px;width:${fallbackPx}px;max-width:100%;min-width:${desktopPercentage}%;width:calc(230400px - 48000%);${fixedStyle}`;
+    // Desktop layout is carried by the gap-aware min-width percentage.
+    // Stacking is handled entirely by the @media query at 599px below.
+    const newStyle = `display:inline-block;width:${fallbackPx}px;max-width:100%;min-width:${desktopPercentage}%;${fixedStyle}`;
     const cleanedStyle = newStyle
       .replace(/\s{2,}/g, ' ')
       .replace(/;\s*;/g, ';')
@@ -355,8 +353,11 @@ function generateResponsiveStyles(specs: TColumnSpec[]): string {
     .join('\n');
 
   return `<style type="text/css">
-@media only screen and (max-width:480px) {
+@media only screen and (max-width:599px) {
 ${mobileRules}
+  .mj-column-wrapper [data-col-gap] {
+    display: none !important;
+  }
 }
 </style>`;
 }

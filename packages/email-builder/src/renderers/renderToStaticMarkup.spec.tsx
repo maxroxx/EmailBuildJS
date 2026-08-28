@@ -4,6 +4,8 @@
 
 import { describe, expect, it } from '@jest/globals';
 
+import { TReaderDocument } from '../Reader/core';
+
 import renderToStaticMarkup from './renderToStaticMarkup';
 
 describe('renderToStaticMarkup', () => {
@@ -140,7 +142,7 @@ describe('renderToStaticMarkup', () => {
       );
       expect(result).toContain('mj-column-per-50');
       expect(result).toContain(
-        'display:inline-block;min-width:270px;width:270px;max-width:100%;min-width:49.916387959866%;width:calc(230400px - 48000%)'
+        'display:inline-block;width:270px;max-width:100%;min-width:49.916387959866%;vertical-align:middle;min-height:40px;margin:0;box-sizing:border-box'
       );
     });
 
@@ -256,7 +258,7 @@ describe('renderToStaticMarkup', () => {
         },
         { rootBlockId: 'root' }
       );
-      expect(result).toContain('@media only screen and (max-width:480px)');
+      expect(result).toContain('@media only screen and (max-width:599px)');
       expect(result).toContain('display: block !important');
       expect(result).toContain('width: 100% !important');
       expect(result).toContain('max-width: 100% !important');
@@ -410,8 +412,8 @@ describe('renderToStaticMarkup', () => {
       // 3 columns = 2 separators between them
       const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
       expect(separatorCount).toBe(2);
-      expect(result).toContain('min-width:33.277591973244%;width:calc(230400px - 48000%)');
-      expect(result).toContain('min-width:179px;width:179px;max-width:100%');
+      expect(result).toContain('min-width:33.277591973244%');
+      expect(result).toContain('width:179px;max-width:100%;min-width:33.277591973244%');
     });
   });
 
@@ -550,11 +552,155 @@ describe('renderToStaticMarkup', () => {
       expect(result).not.toContain('margin-left:12px');
       expect(result).not.toContain('margin-right:20px');
 
-      // Mobile media query still defensively strips every horizontal margin
-      // so stacked columns never stair-step in clients that honor <style>
-      const mediaQuery = result.match(/@media only screen and \(max-width:480px\) \{([\s\S]*?)\}/)?.[1] ?? '';
+      // Mobile media query strips every horizontal margin so stacked columns
+      // never stair-step in clients that honor <style>
+      const mediaQuery = result.match(/@media only screen and \(max-width:599px\) \{([\s\S]*)\}/)?.[1] ?? '';
       expect(mediaQuery).toContain('margin-left: 0 !important;');
       expect(mediaQuery).toContain('margin-right: 0 !important;');
+      expect(mediaQuery).toContain('display: none !important');
+    });
+  });
+
+  describe('viewport breakpoint is fixed at 600px regardless of margins', () => {
+    const breakpoint = 599;
+
+    function buildDoc(columnsCount: 2 | 3, columnsGap = 0, marginBeforeFirst = 0, marginBeforeLast = 0) {
+      const columns = Array.from({ length: columnsCount }, (_, i) => ({
+        childrenIds: [`block_col${i + 1}`],
+      }));
+      const colBlocks: Record<string, unknown> = {};
+      for (let i = 1; i <= columnsCount; i++) {
+        colBlocks[`block_col${i}`] = {
+          type: 'Container',
+          data: {
+            style: {
+              backgroundColor: null,
+              borderColor: null,
+              borderRadius: null,
+              padding: { top: 0, bottom: 0, left: 0, right: 0 },
+            },
+            props: { childrenIds: [] },
+          },
+        };
+      }
+      return {
+        root: {
+          type: 'EmailLayout',
+          data: {
+            backdropColor: '#F5F5F5',
+            canvasColor: '#FFFFFF',
+            textColor: '#262626',
+            fontFamily: 'MODERN_SANS',
+            childrenIds: ['block_cols'],
+          },
+        },
+        block_cols: {
+          type: 'ColumnsContainer',
+          data: {
+            style: {
+              backgroundColor: null,
+              padding: { top: 24, bottom: 24, left: 24, right: 24 },
+            },
+            props: {
+              columnsCount,
+              columnsGap,
+              marginBeforeFirst,
+              marginBeforeLast,
+              columns,
+            },
+          },
+        },
+        ...colBlocks,
+      };
+    }
+
+    const marginValues: { label: string; gap: number; first: number; last: number }[] = [
+      { label: '0px', gap: 0, first: 0, last: 0 },
+      { label: '8px', gap: 8, first: 8, last: 8 },
+      { label: '16px', gap: 16, first: 16, last: 16 },
+      { label: '32px', gap: 32, first: 32, last: 32 },
+    ];
+
+    marginValues.forEach(({ label, gap, first, last }) => {
+      it(`stacking breakpoint does not shift with ${label} margins (2-col)`, () => {
+        const doc = buildDoc(2, gap, first, last) as TReaderDocument;
+        const result = renderToStaticMarkup(doc, { rootBlockId: 'root' });
+
+        // No width-derived stacking: the calc trick is gone
+        expect(result).not.toContain('calc(');
+
+        // The media query breakpoint is always 599px regardless of margin
+        const match = result.match(/@media only screen and \(max-width:(\d+)px\)/);
+        expect(match).not.toBeNull();
+        expect(Number(match![1])).toBe(breakpoint);
+
+        // The media query body contains stacking + margin removal rules
+        const mq = result.match(/@media only screen and \(max-width:599px\) \{([\s\S]*)\}/)?.[1] ?? '';
+        expect(mq).toContain('display: block !important');
+        expect(mq).toContain('width: 100% !important');
+        expect(mq).toContain('margin-left: 0 !important;');
+        expect(mq).toContain('margin-right: 0 !important;');
+        expect(mq).toContain('display: none !important');
+
+        // Desktop HTML keeps the gap spacers (margins preserved at >= 600)
+        // GapSpacer is only rendered when the gap value is > 0
+        if (first > 0) {
+          expect(result).toContain(`data-col-gap="${first}"`);
+        }
+        if (gap > 0) {
+          expect(result).toContain(`data-col-gap="${gap}"`);
+        }
+        if (last > 0) {
+          expect(result).toContain(`data-col-gap="${last}"`);
+        }
+      });
+    });
+
+    marginValues.forEach(({ label, gap, first, last }) => {
+      it(`stacking breakpoint does not shift with ${label} margins (3-col)`, () => {
+        const doc = buildDoc(3, gap, first, last) as TReaderDocument;
+        const result = renderToStaticMarkup(doc, { rootBlockId: 'root' });
+
+        expect(result).not.toContain('calc(');
+
+        const match = result.match(/@media only screen and \(max-width:(\d+)px\)/);
+        expect(match).not.toBeNull();
+        expect(Number(match![1])).toBe(breakpoint);
+
+        const mq = result.match(/@media only screen and \(max-width:599px\) \{([\s\S]*)\}/)?.[1] ?? '';
+        expect(mq).toContain('display: block !important');
+        expect(mq).toContain('width: 100% !important');
+      });
+    });
+
+    it('evaluates the viewport table: >=600 horizontal, <600 stacked (2-col, 16px margins)', () => {
+      const doc = buildDoc(2, 16, 16, 16) as TReaderDocument;
+      const result = renderToStaticMarkup(doc, { rootBlockId: 'root' });
+
+      const match = result.match(/@media only screen and \(max-width:(\d+)px\)/);
+      const bp = Number(match![1]);
+
+      // Viewport 700: above breakpoint → media query inactive → horizontal
+      expect(700 > bp).toBe(true);
+      // Viewport 600: at breakpoint → media query inactive → horizontal
+      expect(600 > bp).toBe(true);
+      // Viewport 599: below breakpoint → media query active → stacked + margins removed
+      expect(599 <= bp).toBe(true);
+      // Viewport 480: below breakpoint → media query active → stacked + margins removed
+      expect(480 <= bp).toBe(true);
+    });
+
+    it('evaluates the viewport table: >=600 horizontal, <600 stacked (3-col, 0px margins)', () => {
+      const doc = buildDoc(3, 0, 0, 0) as TReaderDocument;
+      const result = renderToStaticMarkup(doc, { rootBlockId: 'root' });
+
+      const match = result.match(/@media only screen and \(max-width:(\d+)px\)/);
+      const bp = Number(match![1]);
+
+      expect(700 > bp).toBe(true);
+      expect(600 > bp).toBe(true);
+      expect(599 <= bp).toBe(true);
+      expect(480 <= bp).toBe(true);
     });
   });
 
@@ -813,7 +959,7 @@ describe('renderToStaticMarkup', () => {
         },
         { rootBlockId: 'root' }
       );
-      expect(result).toContain('@media only screen and (max-width:480px)');
+      expect(result).toContain('@media only screen and (max-width:599px)');
       expect(result).toContain('display: block !important');
       expect(result).toContain('width: 100% !important');
     });

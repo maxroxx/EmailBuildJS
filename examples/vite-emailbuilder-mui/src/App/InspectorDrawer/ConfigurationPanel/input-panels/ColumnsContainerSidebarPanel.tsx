@@ -26,20 +26,22 @@ type ColumnsContainerPanelProps = {
   data: ColumnsContainerProps;
   setData: (v: ColumnsContainerProps) => void;
 };
+
+type PartialProps = Partial<NonNullable<ColumnsContainerProps['props']>>;
+
 export default function ColumnsContainerPanel({ data, setData }: ColumnsContainerPanelProps) {
   const [, setErrors] = useState<ZodError | null>(null);
 
   const columnsCount = data.props?.columnsCount ?? 2;
 
-  const updateData = (partial: Partial<ColumnsContainerProps>) => {
-    const newData = {
+  const updateData = (partial: { props?: PartialProps; style?: ColumnsContainerProps['style'] }) => {
+    const newData: ColumnsContainerProps = {
       ...data,
       ...partial,
       props: {
-        ...data.props,
+        ...(data.props ?? {}),
         ...partial.props,
-        columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
-      },
+      } as ColumnsContainerProps['props'],
     };
     const res = ColumnsContainerPropsSchema.safeParse(newData);
     if (res.success) {
@@ -57,12 +59,18 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         value={String(columnsCount)}
         onChange={(v) => {
           const count = v === '2' ? 2 : 3;
+          const existingColumns = data.props?.columns ?? [];
+          const newColumns: [{ childrenIds: string[] }, { childrenIds: string[] }, { childrenIds: string[] }] = [
+            existingColumns[0] ?? { childrenIds: [] },
+            existingColumns[1] ?? { childrenIds: [] },
+            existingColumns[2] ?? { childrenIds: [] },
+          ];
           updateData({
             props: {
               columnsCount: count,
               fixedWidths: [null, null, null],
               fixedHeights: [null, null, null],
-              columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
+              columns: newColumns,
             },
           });
         }}
@@ -76,9 +84,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
       <ColumnHeightsInput
         defaultValue={data.props?.fixedHeights}
         onChange={(fixedHeights) => {
-          updateData({
-            props: { fixedHeights, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
-          });
+          updateData({ props: { fixedHeights } });
         }}
       />
       <Divider sx={{ my: 2 }} />
@@ -88,9 +94,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
       <ColumnWidthsInput
         defaultValue={data.props?.fixedWidths}
         onChange={(fixedWidths) => {
-          updateData({
-            props: { fixedWidths, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
-          });
+          updateData({ props: { fixedWidths } });
         }}
       />
       <SliderInput
@@ -99,7 +103,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         defaultValue={data.props?.marginBeforeFirst ?? 0}
         onChange={(marginBeforeFirst) =>
           updateData({
-            props: { marginBeforeFirst, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+            props: { marginBeforeFirst },
           })
         }
         units="px"
@@ -114,7 +118,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         defaultValue={data.props?.columnsGap ?? 0}
         onChange={(columnsGap) =>
           updateData({
-            props: { columnsGap, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+            props: { columnsGap },
           })
         }
         units="px"
@@ -129,7 +133,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         defaultValue={data.props?.marginBeforeLast ?? 0}
         onChange={(marginBeforeLast) =>
           updateData({
-            props: { marginBeforeLast, columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }] },
+            props: { marginBeforeLast },
           })
         }
         units="px"
@@ -142,12 +146,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         label="Alignment"
         value={data.props?.contentAlignment ?? 'middle'}
         onChange={(v) => {
-          updateData({
-            props: {
-              contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined,
-              columns: [{ childrenIds: [] }, { childrenIds: [] }, { childrenIds: [] }],
-            },
-          });
+          updateData({ props: { contentAlignment: v as 'top' | 'middle' | 'bottom' | null | undefined } });
         }}
       >
         <ToggleButton value="top">

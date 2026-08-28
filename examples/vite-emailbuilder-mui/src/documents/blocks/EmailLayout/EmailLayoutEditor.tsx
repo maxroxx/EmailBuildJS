@@ -37,6 +37,7 @@ export default function EmailLayoutEditor(props: EmailLayoutProps) {
 
   return (
     <div
+      data-email-builder-root
       onClick={() => {
         setSelectedBlockId(null);
       }}

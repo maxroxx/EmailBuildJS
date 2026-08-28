@@ -39,6 +39,7 @@ export default function EmailLayoutReader(props: EmailLayoutProps) {
   const childrenIds = props.childrenIds ?? [];
   return (
     <div
+      data-email-builder-root
       style={{
         backgroundColor: props.backdropColor ?? '#F5F5F5',
         color: props.textColor ?? '#262626',

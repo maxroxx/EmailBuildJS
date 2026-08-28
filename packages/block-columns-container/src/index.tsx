@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 
 const COLOR_SCHEMA = z
@@ -63,7 +63,31 @@ const ColumnsContainerPropsDefaults = {
   contentAlignment: 'middle',
 } as const;
 
+const MOBILE_BREAKPOINT_WIDTH = 600;
+
 export function ColumnsContainer({ style, columns, props, mobile }: ColumnsContainerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [measuredMobile, setMeasuredMobile] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (el == null || typeof window === 'undefined' || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    const target: HTMLElement = el.closest?.('[data-email-builder-root]') ?? el;
+    const update = () => {
+      const width = target.getBoundingClientRect().width;
+      if (width > 0) {
+        setMeasuredMobile(width < MOBILE_BREAKPOINT_WIDTH);
+      }
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  const isMobile = mobile === true || measuredMobile;
+
   const wStyle: CSSProperties = {
     backgroundColor: style?.backgroundColor ?? undefined,
   };
@@ -85,13 +109,13 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
   const marginBeforeLast = blockProps.marginBeforeLast;
 
   return (
-    <div style={wStyle}>
+    <div ref={containerRef} style={wStyle}>
       <div
         className="mj-column-wrapper"
         style={{
           fontSize: '0',
           textAlign: 'left',
-          display: mobile ? 'block' : undefined,
+          display: isMobile ? 'block' : undefined,
           paddingLeft: 1,
           paddingRight: 1,
           boxSizing: 'border-box',
@@ -105,9 +129,9 @@ export function ColumnsContainer({ style, columns, props, mobile }: ColumnsConta
           const trailingGap = index === columnsCount - 1 ? marginBeforeLast : 0;
           return (
             <React.Fragment key={index}>
-              {!mobile && leadingGap > 0 && <GapSpacer width={leadingGap} />}
-              <ColumnWrapper index={index} props={blockProps} columns={columns} mobile={mobile} />
-              {!mobile && trailingGap > 0 && <GapSpacer width={trailingGap} />}
+              {!isMobile && leadingGap > 0 && <GapSpacer width={leadingGap} />}
+              <ColumnWrapper index={index} props={blockProps} columns={columns} mobile={isMobile} />
+              {!isMobile && trailingGap > 0 && <GapSpacer width={trailingGap} />}
             </React.Fragment>
           );
         })}
@@ -176,11 +200,15 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
   const totalGap = marginBeforeFirst + (columnsCount - 1) * columnsGap + marginBeforeLast;
   const gapAwareWidth = widthValue - totalGap / columnsCount;
 
-  // Fab Four (no media query needed): below 480px the calc() grows past
-  // max-width:100% (full-width stacked), above 480px it drops below the
-  // min-width (desktop percentages). Matches renderToStaticMarkup output so
-  // editor/Reader previews behave exactly like the sent email. The exact px
-  // width is carried in data-col-width for the renderer to reconstruct.
+  // Desktop layout is carried by the gap-aware min-width percentage.
+  // Stacking is handled by the @media query at 599px in the email output,
+  // by the mobile prop in the editor/Reader preview, and by the
+  // ResizeObserver-based width check in ColumnsContainer (client-side)
+  // so the canvas stacks + goes full-width immediately when the email
+  // width drops below 600, margin-independent. Matches
+  // renderToStaticMarkup output so editor/Reader previews behave exactly
+  // like the sent email. The exact px width is carried in data-col-width
+  // for the renderer to reconstruct.
   // Desktop min-width targets (share - 1px) for 3 columns and (share - 1.5px)
   // for 2 columns, expressed against the wrapper's content width (email width
   // minus its 2px margins). This keeps the visible total under the email
@@ -205,7 +233,7 @@ function ColumnWrapper({ index, props, columns, mobile }: ColumnWrapperProps) {
     : {
         display: 'inline-block',
         verticalAlign: contentAlignment,
-        width: 'calc(230400px - 48000%)',
+        width: `${desktopPercentage}%`,
         maxWidth: '100%',
         minWidth: `${desktopPercentage}%`,
         minHeight: columnHeight ?? 40,
