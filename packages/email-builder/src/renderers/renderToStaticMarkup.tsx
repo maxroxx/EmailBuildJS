@@ -257,29 +257,25 @@ function fixInlineColumnStyles(html: string): string {
       return fullMatch;
     }
     const widthPx = parseFloat(widthMatch[1]);
-    const percentage = Math.round((widthPx / EMAIL_WIDTH) * 100 * 1e12) / 1e12;
-    // Fallback px for clients that do not support percentage widths.
-    // The desktop layout is carried by the gap-aware min-width percentage
-    // below; the calc-based Fab Four trick was removed because it derived
-    // the stacking breakpoint from the available content width, which
-    // shifted with margin size.
-    const fallbackPx = Math.max(1, Math.floor(((EMAIL_WIDTH - 60) * percentage) / 100));
-    // Desktop min-width targets (share - 1px) for 3 columns and (share - 1.5px)
-    // for 2 columns, expressed against the email's content width (email width
-    // minus its 2px margins). This keeps the visible total under the
-    // email width (599px) so equal columns NEVER sum to exactly 600 -
-    // avoiding the sub-pixel exact-fit wrap in percentage clients (browser,
-    // Apple Mail, Gmail Compose) - while leaving only a ~1px-per-column
-    // gap. The leftover 2px margins put a 1px breathing gap at each side of
-    // the block for a balanced look when columns have background colours.
+    // Per-column desktop share (px): the gap-aware column width minus a small
+    // safety margin so N equal columns never sum to exactly the email width
+    // (avoids the sub-pixel exact-fit wrap in percentage clients - browser,
+    // Apple Mail, Gmail Compose) while leaving a ~1px-per-column gap. The
+    // leftover 2px wrapper margins give a 1px breathing gap at each edge when
+    // columns have background colours.
     const columnCount = parseFloat(fullMatch.match(/data-col-count="([\d.]+)"/)?.[1] ?? '0') || 0;
     const desktopCoreWidth = EMAIL_WIDTH - 2;
     const desktopTarget = widthPx - (columnCount === 2 ? 1.5 : 1);
     const desktopPercentage = Math.round((desktopTarget / desktopCoreWidth) * 100 * 1e12) / 1e12;
 
-    // Desktop layout is carried by the gap-aware min-width percentage.
-    // Stacking is handled entirely by the @media query at 599px below.
-    const newStyle = `display:inline-block;width:${fallbackPx}px;max-width:100%;min-width:${desktopPercentage}%;${fixedStyle}`;
+    // Hybrid (MJML/Cerberus) inline: width:100% so the column fills the
+    // container, clamped by max-width to the desktop share. Desktop stays
+    // N-across (share is small enough that N x share < email width). In
+    // Gmail the @media below is stripped, so this clamp is what caps the
+    // stacked column (~83% of a 358px container); the MQ still gives true
+    // 100% to clients that honour it.
+    const sharePx = Math.max(1, Math.floor(desktopTarget));
+    const newStyle = `display:inline-block;width:100%;max-width:${sharePx}px;min-width:${desktopPercentage}%;${fixedStyle}`;
     const cleanedStyle = newStyle
       .replace(/\s{2,}/g, ' ')
       .replace(/;\s*;/g, ';')

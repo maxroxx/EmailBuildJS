@@ -142,7 +142,7 @@ describe('renderToStaticMarkup', () => {
       );
       expect(result).toContain('mj-column-per-50');
       expect(result).toContain(
-        'display:inline-block;width:270px;max-width:100%;min-width:49.916387959866%;vertical-align:middle;min-height:40px;margin:0;box-sizing:border-box'
+        'display:inline-block;width:100%;max-width:298px;min-width:49.916387959866%;vertical-align:middle;min-height:40px;margin:0;box-sizing:border-box'
       );
     });
 
@@ -413,7 +413,7 @@ describe('renderToStaticMarkup', () => {
       const separatorCount = (result.match(/<\/td><td valign="top"/g) || []).length;
       expect(separatorCount).toBe(2);
       expect(result).toContain('min-width:33.277591973244%');
-      expect(result).toContain('width:179px;max-width:100%;min-width:33.277591973244%');
+      expect(result).toContain('width:100%;max-width:199px;min-width:33.277591973244%');
     });
   });
 
